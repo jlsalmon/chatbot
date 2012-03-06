@@ -6,7 +6,8 @@
 |	Use for commercial purposes without the previous written 	  |
 |	agreement of the authors is forbidden.				  |
 |_______________________________________________________________________ */
-
+/* version 2: added a fileter to remove '\n' from the input list 3/3/2012
+ */
 /* comments added by rong  (Feb 2012)
  */
 
@@ -72,6 +73,8 @@ lc(K,K):-K>96,K<123.
  */
 
 my_filter([],[]).
+my_filter(['\n'|T], R):-  !, % remove new line
+	my_filter(T, R).
 my_filter([nb(2), X|T], [Rm|R]):- 
 	name(X, CharList),
 	q_followed_by_nb(CharList),!,% check if CharList is a letter q+numbers
