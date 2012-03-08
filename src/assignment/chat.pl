@@ -111,7 +111,7 @@ subset(L1, L2) holds if L1 is a subset of L2.
 
 ******************************************************************/
 
-subset(L1, L2):- L1 = [].
+subset([], _).
 
 subset([H|T], L2):- 
 	member(H, L2),

@@ -26,7 +26,7 @@ two lists:
 :- [map].
 
 give_route(X, Y):-
-	find_route(X, Y, start, DirectionList, DistanceList, Path),
+	find_route(X, Y, start, DirectionList, DistanceList, _),
 	simp_route(DirectionList, DistanceList, NewDirList, NewDistList),
 	print_route(X, Y, NewDirList, NewDistList).
 	
@@ -65,18 +65,18 @@ next(_, exit1, east, WhichSide,_)
 
 print_route(Destination, [Direction], [Distance]):- !,
 	next(_, Destination, Direction, WhichSide, _),
-	write(' walk '), write(Direction), write(' '),
-	write(Distance), write(' metres.'),
-	write(' Your destination, '), write(Destination),
-	write(', will be on your '), write(WhichSide), write('.'), nl.
+	write(" walk "), write(Direction), write(" "),
+	write(Distance), write(" metres."),
+	write(" Your destination, "), write(Destination),
+	write(", will be on your "), write(WhichSide), write('.'), nl.
 
 print_route(Destination, [H1 | DirectionList], [H2 | DistanceList]):-	
-	write(' walk '), write(H1), 
-	write(' '), write(H2), write(' metres, then'),
+	write(" walk "), write(H1), 
+	write(" "), write(H2), write(" metres, then"),
 	print_route(Destination, DirectionList, DistanceList).
 
 print_route(Origin, Destination, DirectionList, DistanceList):-
-	write('From '), write(Origin),
+	write("From "), write(Origin),
 	print_route(Destination, DirectionList, DistanceList).
 
 
