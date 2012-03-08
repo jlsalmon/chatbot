@@ -2,6 +2,12 @@
 
 :- use_module(library(random)). % needed for genreating a random number
 
+/*** Notes
+
+
+
+***/
+
 % top level call
 chat:-
 	print_welcome, nl,
@@ -16,9 +22,12 @@ conversations:-
 	write_list(R),
 	is_quit(S).
 
-gen_reply(S, R):- is_quit(S),
+gen_reply(S, R):- is_quit(S),!,
 	respones_db(bye, Res),
 	random_pick(Res, R).
+gen_reply(S, ['Done']):- 
+	pattern_to_from(S, X, Y),!,
+	give_route(X, Y).
 gen_reply(_, R):-  % totally random
 	respones_db(random, Res),
 	random_pick(Res, R).
@@ -32,6 +41,12 @@ random_pick(Res, R):-
 
 
 is_quit(S):- subset([bye], S).
+
+pattern_to_from([to, X, from, Y |_], Y, X):-!.
+pattern_to_from([from, X, to, Y |_], X, Y):-!.
+
+pattern_to_from([_|T], X, Y):-
+	pattern_to_from(T, X, Y).
 
 respones_db(random, [
 	[hello, !],
@@ -85,7 +100,7 @@ The items in List are printed on screen, one by one.
 ******************************************************************/
 
 
-write_list([H|T]):- T = [], write(H).
+write_list([H]):- !,  write(H), nl.
 
 write_list([H|T]):- write(H), write(' '), write_list(T).
 
