@@ -44,6 +44,8 @@ is_quit(S):- subset([bye], S).
 
 pattern_to_from([to, X, from, Y |_], Y, X):-!.
 pattern_to_from([from, X, to, Y |_], X, Y):-!.
+pattern_to_from([at, X, how, do, i, get, to, Y |_], Y, X):-!.
+pattern_to_from([from, X, how, do, i, get, to, Y |_], X, Y):-!.
 
 pattern_to_from([_|T], X, Y):-
 	pattern_to_from(T, X, Y).
@@ -82,52 +84,23 @@ print_welcome:-
 print_prompt(me):-
 	my_icon(X), write(X), write('  : '), flush_output.
 print_prompt(you):-
-	user_icon(X), write(X), write(' '), flush_output.
+	user_icon(X), write(X), write('  : '), flush_output.
 
 my_icon(bot1).
 user_icon(user).
 
 
-/* lib - need to add your write_list, subset, nth_item, ... */
-
-
-/******************************************************************
-
-write_list(List).
-
-The items in List are printed on screen, one by one.
-
-******************************************************************/
-
-
 write_list([H]):- !,  write(H), nl.
-
 write_list([H|T]):- write(H), write(' '), write_list(T).
 
 
-/******************************************************************
-
-subset(L1, L2) holds if L1 is a subset of L2.
-
-******************************************************************/
-
 subset([], _).
-
 subset([H|T], L2):- 
 	member(H, L2),
 	subset(T, L2).
 
-/******************************************************************
-
-nth_item(List, Position, Item).
-
-Holds if the n-th item in the List is X.
-
-******************************************************************/
-
 
 nth_item([H|_], 1, H).
-
 nth_item([_|T], N, X):-
 	nth_item(T, N1, X),
 	N is N1 + 1.
