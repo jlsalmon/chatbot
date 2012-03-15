@@ -241,7 +241,7 @@ test:-  repeat,
         S = [bye|_].
 
 test:- write(bye),nl.
-
+/*
 gen_reply(S,Reply):- 
 	sentence(Tree1, S, _Rest),!, 
 	mapping(s2why,Tree1, Tree2),
@@ -259,6 +259,8 @@ gen_reply(_,[what,'?']). % defaul case
 
 write_list([]):- nl.
 write_list([H|T]):- write(H), write(' '), write_list(T).
+
+*/
 
 /*** test run
 | ?- test.

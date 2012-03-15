@@ -26,6 +26,7 @@ initread([K1,K2|U]):-get_code(K1),get_code(K2),readrest(K2,U).
 readrest(46,[]):-!.  % 46 ascii for '.'
 readrest(63,[]):-!.  % 63 ascii for '?'
 readrest(33,[]):-!.  % 33 ascii for '!'
+readrest(10,[]):-!.  % 10 ascii for '\n' wrote by Justin :)
 %readrest(K,[K1|U]):-K=<32,!,get(K1),readrest(K1,U). % orig code
 %readrest(_K1,[K2|U]):-get0(K2),readrest(K2,U). % orig code
 readrest(K,[K1|U]):-K=<32,!,get_code(K1),readrest(K1,U).
