@@ -66,8 +66,10 @@ random_pick(Res, R):-
 
 is_quit(S):- subset([bye], S), print_report, !.
 
-is_greeting(S):- subset([hello], S).
-is_greeting(S):- subset([hi], S).
+is_greeting(S):-
+        greeting_db(D),
+        intersect(S, D, A),
+        A \== [].
 
 not_question(S).
 
@@ -89,18 +91,23 @@ get_alevel_info_loop:-
 	get_alevel_info_loop(S).
 
 get_alevel_info_loop(S):- 
-	is_valid_alevel_list(S), !.
+	is_valid_alevel(S), !.
 
 get_alevel_info_loop(_):- get_alevel_info_loop.
-/*
-is_valid_alevel_list([H]):- alevel_db(X),
-	member(H, X).
-*/
 
-is_valid_alevel_list([]).
-is_valid_alevel_list([H|T]):- alevel_db(X),
-	(member(H, X), assert(alevel(H)); H == ','),
-	is_valid_alevel_list(T).
+is_valid_alevel(S):- 
+    alevel_db(D),
+    intersect(S,D, A),
+    A \== [],
+   assert(alevel(A)).
+
+intersect([], _, []).  % an empty list intersect with any list = an empty list
+
+intersect([H|T1], L2, [H|T3]):- member(H, L2), !, % if the head of L1 is in L2,it  must be in L3, 
+        intersect(T1, L2, T3).                                 % carry on checking the rest of L1
+
+intersect([_|T1], L2, L3):- % otherwise skip head,  carry on checking
+        intersect(T1, L2, L3).
 
 respones_db(random, [
 	[hello, !],
@@ -123,23 +130,28 @@ respones_db(bye, [
 	]).
 
 respones_db(greeting, [
-	[hello, '!'], 
-	[hello, ', ', nice, to, meet, you, '.'], 
-	[hi, there, '!']
+	['hello!'], 
+	['hello,', nice, to, meet, 'you.'], 
+	[hi, 'there!']
 	]).
 
 respones_db(change_topic, [
 	]).
 
-alevel_db(
-	[maths,
+greeting_db([
+        hello, 
+        hi, 
+        hey
+        ]).
+
+alevel_db([maths,
 	physics,
 	chemistry,
 	geography,
 	biology,
 	history,
-	psychology]	
-	).
+	psychology
+        ]).
 
 print_welcome:-
 	write('Welcome! I am a chatbot'), nl, 
@@ -147,11 +159,11 @@ print_welcome:-
 	flush_output. 
 
 print_prompt(me):-
-	my_icon(X), write(X), write('  : '), flush_output.
+	my_icon(X), write(X), write(': '), flush_output.
 print_prompt(you):-
-	user_icon(X), write(X), write('  : '), flush_output.
+	user_icon(X), write(X), write(': '), flush_output.
 
-my_icon(bot1).
+my_icon(chatbot).
 user_icon(user).
 
 
