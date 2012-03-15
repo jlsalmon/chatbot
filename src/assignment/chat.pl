@@ -1,4 +1,4 @@
-:- [map, readin, find_route]. % load two files map.pl and readin.pl
+:- [map, readin, find_route, english]. % load two files map.pl and readin.pl
 
 :- use_module(library(random)). % needed for genreating a random number
 
@@ -23,7 +23,7 @@ conversations:-
 	is_quit(S).
 
 gen_reply(S, R):- is_quit(S),!,
-	respones_db(bye, Res),
+	respones_db(bye, Res), 
 	random_pick(Res, R).
 gen_reply(S, ['Done']):- 
 	pattern_to_from(S, X, Y),!,
@@ -31,7 +31,22 @@ gen_reply(S, ['Done']):-
 gen_reply(_, R):-  % totally random
 	respones_db(random, Res),
 	random_pick(Res, R).
+% new
+/*
+gen_reply(S,Reply):- 
+	sentence(Tree1, S, _Rest),!, 
+	mapping(s2why,Tree1, Tree2),
+	question(Tree2, Rep,[]),
+	append(Rep, ['?'], Reply).
+gen_reply(S,Reply):- 
+	question(Tree2, S, _Rest),!, 
+	mapping(s2q,Tree1, Tree2),
+	sentence(Tree1, Rep,[]),
+	append([yes, ','|Rep], ['!'], Reply).
 
+gen_reply([bye|_],[bye ,for, now, '.']). 
+gen_reply(_,[what,'?']). % defaul case
+*/
 random_pick(Res, R):- 
 	length(Res, Length),  
 	Upper is Length+1,

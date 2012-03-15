@@ -39,19 +39,19 @@ next('2q5', '2q6', north, left, 5).
 next('2q6', '2q5', south, right, 5).
 
 next('2q6', '2q31', north, right, 4).
-next('2q31', '2q6', south, left, 4).		% should be 'right' not 'left'
+next('2q31', '2q6', south, right, 4).		
 
 next('2q31', '2q30', north, right, 5).
 next('2q30', '2q31', south, left, 5).
 
 next('2q30', '2q9', north, left, 2).
-next('2q9', '2q30', south, right, 2).		% should be 'left' not 'right'
+next('2q9', '2q30', south, left, 2).		
 
 next('2q9', '2q29', north, right, 2).
-next('2q29', '2q9', south, left, 2).		% should be 'right' not 'left'
+next('2q29', '2q9', south, right, 2).		
 
 next('2q29', 'exit5', north, left, 1).
-next('exit5', '2q29', south, right, 1).		% should be 'left' not 'right'
+next('exit5', '2q29', south, left, 1).		
 
 next('exit5', 'junt3', north, front, 12).
 next('junt3', 'exit5', south, right, 12).
@@ -69,7 +69,7 @@ next('junt3', 'area2', east, right,10).
 next('area2', 'junt3', west, front,10).
 
 next('area2', '2q24', east, left,2).
-next('2q24', 'area2', west, right,2).		 % should be 'left' not 'right'
+next('2q24', 'area2', west, left,2).		
 
 next('2q24', '2q25', east, left,4).
 next('2q25', '2q24', west, right,4).
@@ -81,13 +81,13 @@ next('2q52', '2q50', south, right, 6).
 next('2q50', '2q52', north, left, 6).
 
 next('2q50', '2q42', south, left, 4).
-next('2q42', '2q50', north, right, 4).		% should be 'left' not 'right'
+next('2q42', '2q50', north, left, 4).		
 
 next('2q42', '2q43', south, left, 2).
 next('2q43', '2q42', north, right, 2).
 
 next('2q43', '2q49', south, right, 1).
-next('2q49', '2q43', north, left, 1).		% should be 'right' not 'left'
+next('2q49', '2q43', north, right, 1).		
 
 next('2q49', 'area3', south, left, 1).
 next('area3', '2q49', north, left, 1).
@@ -102,7 +102,7 @@ next('2q47', '2q48', south, right, 2).
 next('2q48', '2q47', north, right, 2).
 
 next('2q48', 'exit4', south, front, 2).
-next('exit4', '2q48', north, right, 2).		% should be 'left' not 'right'
+next('exit4', '2q48', north, left, 2).		
 
 /* need to add more */
 info('2q56', reception).
