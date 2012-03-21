@@ -23,38 +23,39 @@ conversations:-
 	is_quit(S).
 
 % check for "bye"
-gen_reply(S, R):- is_quit(S),!,
+gen_reply(S, R):- is_quit(S), !,
 	respones_db(bye, Res), 
 	random_pick(Res, R).
 % check for greeting
-gen_reply(S, R):- is_greeting(S),!,
+gen_reply(S, R):- is_greeting(S), !,
 	respones_db(greeting, Res), 
 	random_pick(Res, R).
 % give a route
-gen_reply(S, _):- 
-	pattern_to_from(S, X, Y),!,
-	give_route(X, Y).
-% start asking questions
-gen_reply(S, R):-
-	not_question(S), !,
-	get_alevel_info_loop,
-	R = ['Thank', you, very, much, '!'].
+gen_reply(S, R):- 
+	pattern_to_from(S, X, Y), !,
+	give_route(X, Y, R).
 % map to why question
 gen_reply(S,Reply):- 
-	sentence(Tree1, S, _Rest),!, 
+	sentence(Tree1, S, _Rest), !, 
 	mapping(s2why,Tree1, Tree2),
 	question(Tree2, Rep,[]),
 	append(Rep, ['?'], Reply).
 % map to question
 gen_reply(S,Reply):- 
-	question(Tree2, S, _Rest),!, 
+	question(Tree2, S, _Rest), !, 
 	mapping(s2q,Tree1, Tree2),
 	sentence(Tree1, Rep,[]),
 	append([yes, ','|Rep], ['!'], Reply).
+% start asking questions
+gen_reply(S, R):-
+        not_question(S), !,
+        get_alevel_info_loop,
+        R = ['Thank', you, very, much, '!'].
 % totally random, last resort
 gen_reply(_, R):-
 	respones_db(random, Res),
 	random_pick(Res, R).
+
 
 random_pick(Res, R):- 
 	length(Res, Length),  
@@ -154,8 +155,8 @@ alevel_db([maths,
         ]).
 
 print_welcome:-
-	write('Welcome! I am a chatbot'), nl, 
-	write('Please finish your line with a full stop, ?, or !'), nl, 
+        print_prompt(me),
+	write('Welcome! I am a chatbot.'), 
 	flush_output. 
 
 print_prompt(me):-

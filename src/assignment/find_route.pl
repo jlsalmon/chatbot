@@ -25,10 +25,10 @@ two lists:
 
 :- [map].
 
-give_route(X, Y):-
+give_route(X, Y, Route):-
 	find_route(X, Y, start, DirectionList, DistanceList, _),
 	simp_route(DirectionList, DistanceList, NewDirList, NewDistList),
-	print_route(X, Y, NewDirList, NewDistList).
+	print_route(X, Y, NewDirList, NewDistList, Route).
 	
 
 find_route(X, Y, PreDir, [Direction], [Distance], [X, Y]):- 
@@ -57,27 +57,27 @@ simp_route([H1, H1|T1], [H2, HT2|T2], SubDirList, SubDistList):-
 
 /**
 
-Program which prints out a direction on screen, such as, "please walk to west 16 meters, turn left (or say turn to south) walk 33 meters, turn right, walk 10 meters, the exit 1 will be on your right". Note that the information about which side exit1 is can be obtained by calling
+Program which prints out a direction on screen, such as, "please walk to west 16 meters, 
+turn left (or say turn to south) walk 33 meters, turn right, walk 10 meters, the exit 1 
+will be on your right". Note that the information about which side exit1 is can be 
+obtained by calling
 
 next(_, exit1, east, WhichSide,_)
 
 */
 
-print_route(Destination, [Direction], [Distance]):- !,
+print_route(Destination, [Direction], [Distance], String):- !,
 	next(_, Destination, Direction, WhichSide, _),
-	write(" walk "), write(Direction), write(" "),
-	write(Distance), write(" metres."),
-	write(" Your destination, "), write(Destination),
-	write(", will be on your "), write(WhichSide), write('.'), nl.
+        String = ['walk', Direction, Distance, 'metres.', 'Your destination,'
+                 , Destination, ', will be on your', WhichSide, '.'].
 
-print_route(Destination, [H1 | DirectionList], [H2 | DistanceList]):-	
-	write(" walk "), write(H1), 
-	write(" "), write(H2), write(" metres, then"),
-	print_route(Destination, DirectionList, DistanceList).
+print_route(Destination, [Dir | DirectionList], [Dist | DistanceList], String):-	
+        String = ['walk', Dir, Dist, 'metres, then' | SubString],
+	print_route(Destination, DirectionList, DistanceList, SubString).
 
-print_route(Origin, Destination, DirectionList, DistanceList):-
-	write("From "), write(Origin),
-	print_route(Destination, DirectionList, DistanceList).
+print_route(Origin, Destination, DirectionList, DistanceList, String):-
+        String = ['From', Origin | SubString],
+	print_route(Destination, DirectionList, DistanceList, SubString).
 
 
 
