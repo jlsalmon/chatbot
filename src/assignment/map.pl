@@ -104,9 +104,21 @@ next('2q48', '2q47', north, right, 2).
 next('2q48', 'exit4', south, front, 2).
 next('exit4', '2q48', north, left, 2).		
 
-/* need to add more */
 info('2q56', reception).
 info('2q6', cafe).
+info('2q4', female_toilet).
+info('2q5', male_toilet).
+info('2q21', female_toilet).
+info('2q23', male_toilet).
+info('area1', vending_machines).
+info('area3', vending_machines).
+info('area2', lockers).
+info('exit1', exit).
+info('exit2', exit).
+info('exit3', exit).
+info('exit4', exit).
+info('exit5', exit).
+info('exit6', exit).
 
 
 

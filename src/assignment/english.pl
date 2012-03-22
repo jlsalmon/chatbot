@@ -1,5 +1,3 @@
-% A small example used in lectrue 8
-
 :-[map]. % needed for defining place names
 
 /* version 1 - define a small set of language without parse tree */
@@ -89,15 +87,19 @@ All = [[i,like,uwe,very,much],[i,like,uwe],[i,like,cs_course,very,much],[i,like,
 sentence(s(X, Y, Z)) --> 
 	subject_phrase(X), verb(Y), object_phrase(Z).
 
-sentence2(s(X, Y)) --> subject_tobe_verb(X), prepositional_phrase(Y).
+sentence(s(X, Y, Z)) --> question(X), determiner(Y), place_name(Z).
+
+sentence(s(X, Y)) --> determiner(X), place_name(Y).
+
+sentence(s(X, Y)) --> subject_tobe_verb(X), prepositional_phrase(Y).
 
 subject_phrase(sp(X)) --> subject_pronoun(X).
-%% subject_phrase --> noun_phrase.
+subject_phrase(sp(X)) --> noun_phrase(X).
 
 object_phrase(op(X,Y)) --> noun_phrase(X), adverb(Y).
 object_phrase(op(X, Y)) --> object_pronoun(X), adverb(Y).
 
-% noun_phrase(np(X, Y)) --> determiner(X), noun(Y).
+noun_phrase(np(X, Y)) --> determiner(X), noun(Y).
 noun_phrase(np(Y)) --> noun(Y).
 
 prepositional_phrase(pp(X, Y)) --> preposition(X), place_name(Y).
@@ -107,25 +109,46 @@ preposition(prep(at)) --> [at].
 preposition(prep(from)) --> [from].
 
 place_name(pname(reception)) --> [reception].
+place_name(pname(cafe)) --> [cafe].
+place_name(pname(toilet)) --> [toilet].
+place_name(pname(vending_machines)) --> [vending_machines].
+place_name(pname(lockers)) --> [lockers].
+place_name(pname(exit)) --> [exit].
 place_name(pname(london)) --> [london].
 place_name(pname(bristol)) --> [bristol].
+place_name(pname(exeter)) --> [exeter].
 place_name(pname(X)) --> [X], { next(X,_,_,_,_) }.
 
 subject_pronoun(spn(i)) --> [i].
 subject_pronoun(spn(we)) --> [we].
 subject_pronoun(spn(you)) --> [you].
+subject_pronoun(spn(they)) --> [they].
+subject_pronoun(spn(he)) --> [he].
+subject_pronoun(spn(she)) --> [she].
+subject_pronoun(spn(it)) --> [it].
+subject_pronoun(spn(who)) --> [who].
 
 object_pronoun(opn(you))--> [you].
 object_pronoun(opn(me))--> [me].
 object_pronoun(opn(us))--> [us].
+object_pronoun(opn(them))--> [them].
+object_pronoun(opn(him))--> [him].
+object_pronoun(opn(her))--> [her].
+object_pronoun(opn(it))--> [it].
 
-%% determiner --> [].
-%% determiner --> [a].
-%% determiner --> [the].
+determiner(dtmnr([])) --> [].
+determiner(dtmnr([a])) --> [a].
+determiner(dtmnr([the])) --> [the].
+determiner(dtmnr([my])) --> [my].
+determiner(dtmnr([some])) --> [some].
+determiner(dtmnr([all])) --> [all].
+determiner(dtmnr([that])) --> [that].
 
 noun(noun(uwe)) --> [uwe].
 noun(noun(cs_course)) --> [cs_course].
 noun(noun(robotics_course)) --> [robotics_course].
+noun(noun(robotics_course)) --> [computing_course].
+noun(noun(robotics_course)) --> [sd_course].
 
 adverb(ad([very, much])) --> [very, much].
 adverb(ad([])) --> [].
@@ -163,11 +186,13 @@ L = [i,am,in,bristol] ?
 
 ****/
 
-/* version 3 add some questions
+/* 
+        version 3 add some questions
  */
 
 question(q(why,do,S)) --> [why, do], sentence(S).
 question(q(do,S)) --> [do], sentence(S).
+question(q(where,is,S)) --> [where, is], sentence(S).
 
 /* after added the above line, we can handle questions like:
 
@@ -182,32 +207,101 @@ Tree = q(why,do,s(sp(spn(you)),vb(love),op(opn(me),ad([])))) ?
 
 mapping(s2why, % type of mapping is from a sentence to why question
 	       % e.g [i,love,you] => [why,do,you,love,me] 
-	s(sp(spn(N1)),vb(V),op(opn(N2),ad(X))),
-	q(why,do,s(sp(spn(P1)),vb(V),op(opn(P2),ad(X)))) 
+	s(
+            sp(spn(N1)),
+            vb(V),
+            op(
+                 opn(N2), 
+                 ad(X)
+              )
+         ),
+	q(
+            why,do,
+            s(
+                sp(spn(P1)),
+                vb(V),
+                op(
+                     opn(P2),
+                     ad(X)
+                  )
+             )
+         ) 
 	) :- 
 	mapping_spn(N1, P1), mapping_opn(N2, P2). 
 mapping(s2why, % 
 	       % e.g [i,love,uwe] => [why,do,you,love,uwe] 
-	s(sp(spn(N1)),vb(V),op(np(noun(N2)),ad(X))),
-	q(why,do,s(sp(spn(P1)),vb(V),op(np(noun(N2)),ad(X)))) 
+	s(
+            sp(spn(N1)),
+            vb(V),
+            op(
+                 np(noun(N2)),
+                 ad(X)
+              )
+         ),
+	q(
+            why,do,
+            s(
+                sp(spn(P1)),
+                vb(V),
+                op(
+                     np(noun(N2)),
+                     ad(X)
+                  )
+             )
+         ) 
 	) :- 
 	mapping_spn(N1, P1).
 
 mapping(s2q, % type of mapping is from a sentence to question
 	       % e.g [i,love,uwe] => [do,you,love,me] 
-	s(sp(spn(N1)),vb(V),op(opn(N2),ad(X))),
-	q(do,s(sp(spn(P1)),vb(V),op(opn(P2),ad(X)))) 
+	s(
+            sp(spn(N1)),
+            vb(V),
+            op(
+                 opn(N2)
+              ,ad(X)
+              )
+         ),
+	q(
+            do,
+            s(
+                sp(spn(P1)),
+                vb(V),
+                op(
+                     opn(P2),
+                     ad(X)
+                  )
+             )
+         ) 
 	) :- 
 	mapping_spn(N1, P1), mapping_opn(N2, P2). 
 mapping(s2q, % 
 	       % e.g [i,love,uwe] => [do,you,love,uwe] 
-	s(sp(spn(N1)),vb(V),op(np(noun(N2)),ad(X))),
-	q(do,s(sp(spn(P1)),vb(V),op(np(noun(N2)),ad(X)))) 
+	s(
+            sp(spn(N1)),
+            vb(V),
+            op(
+                 np(noun(N2)),
+                 ad(X)
+              )
+         ),
+	q(
+            do,
+            s(
+                sp(spn(P1)),
+                vb(V),
+                op(
+                     np(noun(N2)),
+                     ad(X)
+                  )
+             )
+         ) 
 	) :- 
 	mapping_spn(N1, P1).
 
 mapping_spn(i,you).
 mapping_spn(you,i).
+
 mapping_opn(you,me).
 mapping_opn(me,you).
 
@@ -235,53 +329,9 @@ T2 = q(do,s(sp(spn(you)),vb(like),op(np(noun(uwe)),ad([])))) ? ;
 :-[readin].
 
 test:-  repeat,
-        readin(S),              % defined in file readin.pl
+        readin(S),
         gen_reply(S,Ans),
         write_list(Ans), nl,
         S = [bye|_].
 
 test:- write(bye),nl.
-/*
-gen_reply(S,Reply):- 
-	sentence(Tree1, S, _Rest),!, 
-	mapping(s2why,Tree1, Tree2),
-	question(Tree2, Rep,[]),
-	append(Rep, ['?'], Reply).
-gen_reply(S,Reply):- 
-	question(Tree2, S, _Rest),!, 
-	mapping(s2q,Tree1, Tree2),
-	sentence(Tree1, Rep,[]),
-	append([yes, ','|Rep], ['!'], Reply).
-
-gen_reply([bye|_],[bye ,for, now, '.']). 
-gen_reply(_,[what,'?']). % defaul case
-
-
-write_list([]):- nl.
-write_list([H|T]):- write(H), write(' '), write_list(T).
-
-*/
-
-/*** test run
-| ?- test.
-|: hi!
-|: what ? 
-
-Hi!
-|: what ? 
-
-i love you!
-|: why do you love me ? 
-
-don't know.
-|: what ? 
-
-do you love me?
-|: yes , i love you ! 
-
-bye.
-bye for now . 
-
-yes
-| ?- 
-*******************/

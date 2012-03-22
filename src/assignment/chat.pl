@@ -47,10 +47,10 @@ gen_reply(S,Reply):-
 	sentence(Tree1, Rep,[]),
 	append([yes, ','|Rep], ['!'], Reply).
 % start asking questions
-gen_reply(S, R):-
-        not_question(S), !,
-        get_alevel_info_loop,
-        R = ['Thank', you, very, much, '!'].
+%gen_reply(S, R):-
+ %       not_question(S), !,
+ %       get_alevel_info_loop,
+ %       R = ['Thank', you, very, much, '!'].
 % totally random, last resort
 gen_reply(_, R):-
 	respones_db(random, Res),
@@ -168,7 +168,7 @@ my_icon(chatbot).
 user_icon(user).
 
 
-write_list([H]):- !,  write(H), nl.
+write_list([]):- nl.
 write_list([H|T]):- write(H), write(' '), write_list(T).
 
 
