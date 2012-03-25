@@ -1,12 +1,6 @@
-:- [map, readin, find_route, english]. % load two files map.pl and readin.pl
+:- [map, readin, find_route, english].
 
 :- use_module(library(random)). % needed for genreating a random number
-
-/*** Notes
-
-
-
-***/
 
 % top level call
 chat:-
@@ -34,6 +28,12 @@ gen_reply(S, R):- is_greeting(S), !,
 gen_reply(S, R):- 
 	pattern_to_from(S, X, Y), !,
 	give_route(X, Y, R).
+% give directions
+gen_reply(S, R):- 
+        pattern_where_is(S, X), !,
+        get_location,
+        write(location(Y)),
+        give_route(X, Y, R).
 % map to why question
 gen_reply(S,Reply):- 
 	sentence(Tree1, S, _Rest), !, 
@@ -47,10 +47,10 @@ gen_reply(S,Reply):-
 	sentence(Tree1, Rep,[]),
 	append([yes, ','|Rep], ['!'], Reply).
 % start asking questions
-%gen_reply(S, R):-
- %       not_question(S), !,
- %       get_alevel_info_loop,
- %       R = ['Thank', you, very, much, '!'].
+gen_reply(S, R):-
+        not_question(S), !,
+        get_alevel_info_loop,
+        R = ['Thanks', for, the, 'info!'].
 % totally random, last resort
 gen_reply(_, R):-
 	respones_db(random, Res),
@@ -72,15 +72,36 @@ is_greeting(S):-
         intersect(S, D, A),
         A \== [].
 
-not_question(S).
+not_question(S):-
+        \+member('?', S).
 
 pattern_to_from([to, X, from, Y |_], Y, X):-!.
 pattern_to_from([from, X, to, Y |_], X, Y):-!.
 pattern_to_from([at, X, how, do, i, get, to, Y |_], Y, X):-!.
 pattern_to_from([from, X, how, do, i, get, to, Y |_], X, Y):-!.
-
 pattern_to_from([_|T], X, Y):-
 	pattern_to_from(T, X, Y).
+
+pattern_where_is([where, is, X |_], X):-!.
+pattern_where_is([where, is, the, X |_], X):-!.
+pattern_where_is([where, is, a, X |_], X):-!.
+pattern_where_is([where, can, i, find, X |_], X):-!.
+pattern_where_is([where, can, i, find, the, X |_], X):-!.
+pattern_where_is([where, can, i, find, a, X |_], X):-!.
+pattern_where_is([_|T], X):-
+        pattern_where_is(T, X).
+
+get_location:-
+        print_prompt(me),
+        write('Where are you at the moment?'), nl,
+        print_prompt(you),
+        readin(L),
+        get_location(L).
+
+get_location(L):-
+        is_valid_loc(L), assert(location(L)), !.
+
+get_location(_):- get_location.
 
 is_valid_loc(X):- next(X,_,_,_,_).
 
