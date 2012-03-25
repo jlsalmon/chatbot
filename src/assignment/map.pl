@@ -1,3 +1,9 @@
+% File: map.pl
+% Author: Justin Lewis Salmon
+% Student ID: 10000937
+%
+% Description: 
+
 /************************  Map of Q-Block level 2 only ********
    represented by the following relation
 
@@ -119,41 +125,4 @@ info('exit3', exit).
 info('exit4', exit).
 info('exit5', exit).
 info('exit6', exit).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
