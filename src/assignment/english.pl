@@ -1,3 +1,9 @@
+% File:         english.pl
+% Author:       Justin Lewis Salmon
+% Student ID:   10000937
+%
+% Description:  
+
 :-[map]. % needed for defining place names
 
 /* version 2 - add parse tree */

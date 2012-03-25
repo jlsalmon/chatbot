@@ -1,11 +1,11 @@
-% File: chat.pl
-% Author: Justin Lewis Salmon
-% Student ID: 10000937
+% File:         chat.pl
+% Author:       Justin Lewis Salmon
+% Student ID:   10000937
 %
-% Description: 
+% Description:  
 
 :- [map, database, route, pattern, readin, english, lib].
-:- use_module(library(random)). % needed for generating a random number
+:- use_module(library(random)).
 
 % top level call
 chat:-
@@ -15,7 +15,7 @@ chat:-
 conversations:-
 	repeat, % prolog built-in which repeats through backtracking 
 	print_prompt(you),
-	readin(S), % defined in file readin.pl
+	readin(S),
 	gen_reply(S,R),
 	print_prompt(me),
 	write_list(R),

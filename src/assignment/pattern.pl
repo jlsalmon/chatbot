@@ -1,9 +1,14 @@
-% File: pattern.pl
-% Author: Justin Lewis Salmon
-% Student ID: 10000937
+% File:         pattern.pl
+% Author:       Justin Lewis Salmon
+% Student ID:   10000937
 %
-% Description: 
+% Description:  Contains functions for matching sentences input by the
+%               user with specific patterns.
 
+
+% pattern_to_from(Sentence, Origin, Destination)
+%
+%
 pattern_to_from([to, X, from, Y |_], Y, X):-!.
 pattern_to_from([from, X, to, Y |_], X, Y):-!.
 pattern_to_from([at, X, how, do, i, get, to, Y |_], Y, X):-!.
@@ -11,6 +16,9 @@ pattern_to_from([from, X, how, do, i, get, to, Y |_], X, Y):-!.
 pattern_to_from([_|T], X, Y):-
         pattern_to_from(T, X, Y).
 
+% pattern_where_is(Sentence, Destination)
+%
+%
 pattern_where_is([where, is, the, X |_], X):-!.
 pattern_where_is([where, is, a, X |_], X):-!.
 pattern_where_is([where, is, X |_], X):-!.

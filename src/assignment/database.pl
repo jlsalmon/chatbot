@@ -1,8 +1,9 @@
-% File: database.pl
-% Author: Justin Lewis Salmon
-% Student ID: 10000937
+% File:         database.pl
+% Author:       Justin Lewis Salmon
+% Student ID:   10000937
 %
-% Description: 
+% Description:  Contains databases for general use throughput the chatbot
+%               program.
 
 responses_db(random, [
         [hello, !],
@@ -31,6 +32,7 @@ responses_db(greeting, [
         ]).
 
 responses_db(change_topic, [
+        ['Do you mind if I ask you some questions?']
         ]).
 
 greeting_db([
