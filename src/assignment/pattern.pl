@@ -27,3 +27,13 @@ pattern_where_is([where, can, i, find, a, X |_], X):-!.
 pattern_where_is([where, can, i, find, X |_], X):-!.
 pattern_where_is([_|T], X):-
         pattern_where_is(T, X).
+
+pattern_name([what, is, your, name, X |_], X):-!.
+pattern_name(['what\'s', your, name, X |_], X):-!.
+pattern_name([whats, your, name, X |_], X):-!.
+pattern_name([what, are, you, called, X |_], X):-!.
+pattern_name([who, are, you, X |_], X):-!.
+pattern_name([_|T], X):-
+        pattern_name(T, X).
+
+

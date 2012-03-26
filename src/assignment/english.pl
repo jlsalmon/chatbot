@@ -53,6 +53,7 @@ subject_pronoun(spn(it)) --> [it].
 subject_pronoun(spn(who)) --> [who].
 
 object_pronoun(opn(you))--> [you].
+object_pronoun(opn(your))--> [your].
 object_pronoun(opn(me))--> [me].
 object_pronoun(opn(us))--> [us].
 object_pronoun(opn(them))--> [them].
@@ -73,12 +74,14 @@ noun(noun(cs_course)) --> [cs_course].
 noun(noun(robotics_course)) --> [robotics_course].
 noun(noun(robotics_course)) --> [computing_course].
 noun(noun(robotics_course)) --> [sd_course].
+noun(noun(name)) --> ['ChatBot'].
 
 adverb(ad([very, much])) --> [very, much].
 adverb(ad([])) --> [].
 
 verb(vb(like)) --> [like].
 verb(vb(love)) --> [love].
+verb(vb(is)) --> [is].
 
 subject_tobe_verb(s_2b([you, are])) --> [you, are].
 subject_tobe_verb(s_2b([i,am])) --> [i, am].
@@ -110,13 +113,12 @@ L = [i,am,in,bristol] ?
 
 ****/
 
-/* 
-        version 3 add some questions
- */
+/*  version 3 add some questions */
 
 question(q(why,do,S)) --> [why, do], sentence(S).
 question(q(do,S)) --> [do], sentence(S).
 question(q(where,is,S)) --> [where, is], sentence(S).
+question(q(what,is,S)) --> [what, is], sentence(S).
 
 /* after added the above line, we can handle questions like:
 
@@ -126,8 +128,7 @@ Tree = q(why,do,s(sp(spn(you)),vb(love),op(opn(me),ad([])))) ?
 
 **************/
 
-/* version 4 add rules for changing a sentence to a question, vice versa
- */
+/* version 4 add rules for changing a sentence to a question, vice versa */
 
 mapping(s2why, % type of mapping is from a sentence to why question
 	       % e.g [i,love,you] => [why,do,you,love,me] 
@@ -182,8 +183,8 @@ mapping(s2q, % type of mapping is from a sentence to question
             sp(spn(N1)),
             vb(V),
             op(
-                 opn(N2)
-              ,ad(X)
+                 opn(N2),
+                 ad(X)
               )
          ),
 	q(
@@ -223,8 +224,27 @@ mapping(s2q, %
 	) :- 
 	mapping_spn(N1, P1).
 
+mapping(s2name,
+        s(
+            sp(spn(What)),
+            vb(Is),
+            op(
+                 np(noun(N2)),
+                 ad(X)
+              )
+         ),
+        q(
+            sp(spn(P1)),
+            name, is,
+            np(noun(name))
+         )
+        ):-
+        mapping_spn(N1, P1).
+
 mapping_spn(i,you).
 mapping_spn(you,i).
+mapping_spn(my,your).
+mapping_spn(your,my).
 
 mapping_opn(you,me).
 mapping_opn(me,you).

@@ -63,6 +63,11 @@ gen_reply(S, R):-
         location(Y),
         find_route(Y, D, R),
         retract(location(Y)).
+% asking my name?
+gen_reply(S, R):-
+        pattern_name(S, _), !,
+        responses_db(my_name, D),
+        random_pick(D, R).
 % map to why question
 gen_reply(S,Reply):- 
 	sentence(Tree1, S, _Rest), !, 

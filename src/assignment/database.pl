@@ -2,7 +2,7 @@
 % Author:       Justin Lewis Salmon
 % Student ID:   10000937
 %
-% Description:  Contains databases for general use throughput the chatbot
+% Description:  Contains databases for general use throughout the chatbot
 %               program.
 
 responses_db(random, [
@@ -46,7 +46,14 @@ responses_db(get_alevels, [
         ['Haven\'t heard of that one before!'],
         ['That\'s not a real subject...']
         ]).
-               
+            
+responses_db(my_name, [
+        ['My name is CHATBOT, nice to meet you.'],
+        ['I\'m CHATBOT!'],
+        ['My name isn\'t important right now.'],
+        ['CHATBOT, at your service, how may I help?']
+        ]).
+
 greeting_db([
         hello, 
         hi, 
@@ -59,6 +66,12 @@ alevel_db([maths,
         geography,
         biology,
         history,
-        psychology
+        psychology,
+        english,
+        french,
+        spanish,
+        german,
+        music,
+        computing
         ]).
 
