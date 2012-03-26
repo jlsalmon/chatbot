@@ -3,18 +3,6 @@
 % Student ID:   10000937
 %
 % Description:  
-
-% Feedback items:
-%       - Do you think the talk given was informative?
-%       - Was the open day well organised?
-%       - Were the sudent ambassadors helpful?
-%       - What are your thoughts on the open day overall?
-%
-% Information items:
-%       - Where are you from?
-%       - Which other universities have you applied to?
-%       - What A-level subjects are you taking?
-%       - What is your name?
 %
 % Compulsory questions to be asked:
 %       - What is your name?
@@ -103,7 +91,7 @@ gen_reply(S, R):-
         responses_db(thanks, D),
         random_pick(D, R).
 % totally random, last resort
-gen_reply(S, R):-
+gen_reply(_, R):-
 	responses_db(random, Res),
 	random_pick(Res, R).
 
@@ -132,7 +120,8 @@ get_location(_):-
         write_list(R),
         get_location.
 
-is_valid_loc([L|_], L):- next(L,_,_,_,_), !.
+is_valid_loc([L|_], L):- 
+        next(L,_,_,_,_), !.
 
 get_feedback(0).
 get_feedback(N):-
@@ -201,10 +190,14 @@ random_pick(Res, R):-
         nth_item(Res, Rand, R).
 
 print_report:-
-	alevel(X), write(X), write(' '), retract(alevel(X)), fail.
+        write('Conversation report:'),
+	alevel(X), write(X), write(' '), 
+        retract(alevel(X)), fail.
 print_report:-
-        nl, feedback(X, Y), write(X), write(' '), write(Y), nl, retract(feedback(X, Y)), fail.
+        nl, feedback(X, Y), write(X), write(' : '), write_list(Y), 
+        retract(feedback(X, Y)), fail.
 print_report:-
-        nl, information(X, Y), write(X), write(' '), write(Y), nl, retract(information(X, Y)), fail.
-print_report:- nl.
+        nl, information(X, Y), write(X), write(' : '), write_list(Y), 
+        retract(information(X, Y)), fail.
+print_report.
 
