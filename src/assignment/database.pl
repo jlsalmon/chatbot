@@ -32,6 +32,12 @@ responses_db(get_alevels, [
         ['Haven\'t heard of that one before!'],
         ['That\'s not a real subject...']
         ]).
+
+responses_db(get_name, [
+        ['Is that your real name?'],
+        ['That\'s not your real name...'],
+        ['That can\'t be your name.']
+        ]).
             
 responses_db(my_name, [
         ['My name is CHATBOT, nice to meet you.'],

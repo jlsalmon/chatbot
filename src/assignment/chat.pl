@@ -13,8 +13,7 @@
 
 :- [map, database, route, pattern, readin, english, lib, names].
 :- use_module(library(random)).
-:- dynamic information/2, feedback/2, alevel/1.
-:- volatile information/2, feedback/2, alevel/1.
+:- dynamic usr_name/2, information/2, feedback/2, alevel/1.
 
 % top level call
 chat:-
@@ -52,9 +51,9 @@ gen_reply(S, R):-
         print_prompt(me),
         write('Where are you at the moment?'), nl,
         get_location,
-        location(Y),
+        loc(Y),
         find_route(Y, D, R),
-        retract(location(Y)).
+        retract(loc(Y)).
 % asking my name?
 gen_reply(S,Reply):- 
         question(Tree2, S, _Rest), !, 
@@ -79,15 +78,15 @@ gen_reply(S,Reply):-
 	append([yes, ','|Rep], ['!'], Reply).
 % start asking questions
 gen_reply(S, R):-
-        \+ is_question(S), 
-        \+ feedback(_, _), !,
-        get_feedback(4),
-        responses_db(thanks, D),
-        random_pick(D, R).
-gen_reply(S, R):-
         \+ is_question(S), !,
         \+ information(_, _),
         get_info(4),
+        responses_db(thanks, D),
+        random_pick(D, R).
+gen_reply(S, R):-
+        \+ is_question(S), 
+        \+ feedback(_, _), !,
+        get_feedback(4),
         responses_db(thanks, D),
         random_pick(D, R).
 % totally random, last resort
@@ -112,7 +111,7 @@ get_location:-
         get_location(L).
 get_location(X):-
         is_valid_loc(X, L), 
-        assert(location(L)), !.
+        assert(loc(L)), !.
 get_location(_):- 
         responses_db(get_location, D),
         random_pick(D, R),
@@ -138,17 +137,27 @@ get_feedback(N):-
 get_info(0).
 get_info(N):-
         questions_db(info, D),
-        nth_item(D, N, R),
+        nth_item(D, N, Q),
         print_prompt(me),
-        write_list(R),
+        write_list(Q),
         print_prompt(you),
-        readin(S),
-        assert(information(R, S)),
+        readin(R),
+        get_info(Q, R, N),
         M is N - 1,
         get_info(M).
-%get_info(N, Q):-
-%        subset([name], Q),
-        
+get_info(QL, RL, N):-
+        nth_item(QL, 1, Q),
+        contains(Q, name),
+        ((nth_item(RL, 1, R),
+         name(R),
+         assert(usr_name(Q, R)))
+        ;
+        (responses_db(get_name, D), 
+         random_pick(D, X), 
+         print_prompt(me),
+         write_list(X),
+         get_info(N))).
+ 
 
 get_alevel_info_loop:-
 	print_prompt(you),
