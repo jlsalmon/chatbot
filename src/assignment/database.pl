@@ -5,20 +5,6 @@
 % Description:  Contains databases for general use throughout the chatbot
 %               program.
 
-responses_db(random, [
-        ['Hello!'],
-        ['Hi there, this is not a Hello World program!'],
-        ['Oh ... ok.'],
-        ['Isn\'t it a nice day?'],
-        ['Sorry, I\'m only a simple chatbot.'],
-        ['Sorry, I can\'t remember everything you said...'],
-        ['Can you say that again?'],
-        ['Do you like UWE?'],
-        ['Can we be friends?'],
-        ['Have you taked to me before?'],
-        ['...what do you mean?'] 
-        ]).
-
 responses_db(bye, [
         ['Bye!'], 
         ['Hope to see you again.'], 
@@ -54,6 +40,50 @@ responses_db(my_name, [
         ['CHATBOT, at your service, how may I help?']
         ]).
 
+responses_db(my_subjects, [
+        ['I\'m studying Computer Science!'],
+        ['Computer Science - it\'s great.'],
+        ['Never mind about my subjects...'],
+        ['Computer Science.'],
+        ['Why do you want to know what I\'m studying?']
+        ]).
+
+responses_db(thanks, [
+        ['Thanks for the info!'],
+        ['Thanks, that\'s helpful.'],
+        ['Ok, thanks.'],
+        ['Cheers for that.'],
+        ['Nice one.']
+        ]).
+
+responses_db(random, [
+        ['Hello!'],
+        ['Hi there, this is not a Hello World program!'],
+        ['Oh ... ok.'],
+        ['Isn\'t it a nice day?'],
+        ['Sorry, I\'m only a simple chatbot.'],
+        ['Sorry, I can\'t remember everything you said...'],
+        ['Can you say that again?'],
+        ['Do you like UWE?'],
+        ['Can we be friends?'],
+        ['Have you taked to me before?'],
+        ['...what do you mean?'] 
+        ]).
+
+questions_db(feedback, [
+        ['Okay. Do you think the talk given was informative?'],
+        ['Right. Do you think the open day was well organised?'],
+        ['Right, ok. Have the student ambassadors been helpful?'],
+        ['So, what are your thoughts on the open day overall?']
+        ]).
+
+questions_db(info, [
+        ['So where are you from?'],
+        ['Which universities have you applied to (except UWE)?'],
+        ['Right, ok. So what A-level subjects are you taking?'],
+        ['What\'s your name?']
+        ]).
+
 greeting_db([
         hello, 
         hi, 
@@ -74,4 +104,3 @@ alevel_db([maths,
         music,
         computing
         ]).
-

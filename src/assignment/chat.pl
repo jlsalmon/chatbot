@@ -7,14 +7,14 @@
 % Feedback items:
 %       - Do you think the talk given was informative?
 %       - Was the open day well organised?
-%       - 
-%       - 
+%       - Were the sudent ambassadors helpful?
+%       - What are your thoughts on the open day overall?
 %
 % Information items:
-%       - Where is he/she from?
-%       - Which other universities has he/she applied to?
-%       - 
-%       - 
+%       - Where are you from?
+%       - Which other universities have you applied to?
+%       - What A-level subjects are you taking?
+%       - What is your name?
 %
 % Compulsory questions to be asked:
 %       - What is your name?
@@ -23,8 +23,10 @@
 %       - Is there a cafe in this building?
 %       - How do I get out of this building?
 
-:- [map, database, route, pattern, readin, english, lib].
+:- [map, database, route, pattern, readin, english, lib, names].
 :- use_module(library(random)).
+:- dynamic information/2, feedback/2, alevel/1.
+:- volatile information/2, feedback/2, alevel/1.
 
 % top level call
 chat:-
@@ -35,11 +37,11 @@ conversations:-
 	repeat, % prolog built-in which repeats through backtracking 
 	print_prompt(you),
 	readin(S),
-        assert(conversation(S)),
 	gen_reply(S,R),
 	print_prompt(me),
 	write_list(R),
-	is_quit(S).
+	is_quit(S), 
+        print_report, !.
 
 % check for "bye"
 gen_reply(S, R):- 
@@ -71,10 +73,10 @@ gen_reply(S,Reply):-
         mapping(s2name,Tree1, Tree2),
         sentence(Tree1, Rep,[]),
         append([yes, ','|Rep], ['!'], Reply).
-%gen_reply(S, R):-
-%        pattern_name(S, _), !,
-%        responses_db(my_name, D),
-%        random_pick(D, R).
+gen_reply(S, R):-
+        pattern_name(S, _), !,
+        responses_db(my_name, D),
+        random_pick(D, R).
 % map to why question
 gen_reply(S,Reply):- 
 	sentence(Tree1, S, _Rest), !, 
@@ -89,13 +91,19 @@ gen_reply(S,Reply):-
 	append([yes, ','|Rep], ['!'], Reply).
 % start asking questions
 gen_reply(S, R):-
-        \+is_question(S), !,
-        print_prompt(me),
-        write('What subjects are you taking?'), nl,
-        get_alevel_info_loop,
-        R = ['Thanks', for, the, 'info!'].
+        \+ is_question(S), 
+        \+ feedback(_, _), !,
+        get_feedback(4),
+        responses_db(thanks, D),
+        random_pick(D, R).
+gen_reply(S, R):-
+        \+ is_question(S), !,
+        \+ information(_, _),
+        get_info(4),
+        responses_db(thanks, D),
+        random_pick(D, R).
 % totally random, last resort
-gen_reply(_, R):-
+gen_reply(S, R):-
 	responses_db(random, Res),
 	random_pick(Res, R).
 
@@ -108,8 +116,7 @@ is_question(S):-
         member('?', S).
 
 is_quit(S):- 
-        subset([bye], S), 
-        print_report, !.
+        subset([bye], S).
 
 get_location:-
         print_prompt(you),
@@ -124,6 +131,35 @@ get_location(_):-
         print_prompt(me),
         write_list(R),
         get_location.
+
+is_valid_loc([L|_], L):- next(L,_,_,_,_), !.
+
+get_feedback(0).
+get_feedback(N):-
+        questions_db(feedback, D),
+        nth_item(D, N, R),
+        print_prompt(me),
+        write_list(R),
+        print_prompt(you),
+        readin(S),
+        assert(feedback(R, S)),
+        M is N - 1,
+        get_feedback(M).
+
+get_info(0).
+get_info(N):-
+        questions_db(info, D),
+        nth_item(D, N, R),
+        print_prompt(me),
+        write_list(R),
+        print_prompt(you),
+        readin(S),
+        assert(information(R, S)),
+        M is N - 1,
+        get_info(M).
+%get_info(N, Q):-
+%        subset([name], Q),
+        
 
 get_alevel_info_loop:-
 	print_prompt(you),
@@ -143,8 +179,6 @@ is_valid_alevel(S):-
         intersect(S,D, A),
         A \== [],
         assert(alevel(A)).
-
-is_valid_loc([L|_], L):- next(L,_,_,_,_), !.
 
 print_welcome:-
         print_prompt(me),
@@ -169,6 +203,8 @@ random_pick(Res, R):-
 print_report:-
 	alevel(X), write(X), write(' '), retract(alevel(X)), fail.
 print_report:-
-        nl, conversation(X), write(X), write(' '), retract(conversation(X)), fail.
+        nl, feedback(X, Y), write(X), write(' '), write(Y), nl, retract(feedback(X, Y)), fail.
+print_report:-
+        nl, information(X, Y), write(X), write(' '), write(Y), nl, retract(information(X, Y)), fail.
 print_report:- nl.
 

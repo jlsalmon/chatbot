@@ -81,10 +81,10 @@ next('exit4', '2q48', north, left, 2).
 %
 info('2q56', reception).
 info('2q6', cafe).
-info('2q4', female_toilet).
-info('2q5', male_toilet).
-info('2q21', female_toilet).
-info('2q23', male_toilet).
+info('2q4', toilet).
+info('2q5', toilet).
+info('2q21', toilet).
+info('2q23', toilet).
 info('area1', vending_machines).
 info('area3', vending_machines).
 info('area2', lockers).
