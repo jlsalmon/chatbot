@@ -6,35 +6,47 @@
 %               program.
 
 responses_db(random, [
-        [hello, !],
-        [hi, there , '.', this, is, not, a, hello_world, program, '!'],
-        [oh, '......', ok],
-        [it, is, a, nice, day, '.'],
-        [sorry, ',', i, am, only, a, single, minded, chatbot, '.'],
-        [sorry, i, cannot, remember, everything, you, said, '.'],
-        [can, you, say, it, again, '?'],
-        [do, you, like, uwe, '?'],
-        [can, we, be, friends, '?'],
-        [have, you, talked, to, me, before, '?'],
-        ['.', '.', '.', what, do, you, mean, '?'] 
+        ['Hello!'],
+        ['Hi there, this is not a Hello World program!'],
+        ['Oh ... ok.'],
+        ['Isn\'t it a nice day?'],
+        ['Sorry, I\'m only a simple chatbot.'],
+        ['Sorry, I can\'t remember everything you said...'],
+        ['Can you say that again?'],
+        ['Do you like UWE?'],
+        ['Can we be friends?'],
+        ['Have you taked to me before?'],
+        ['...what do you mean?'] 
         ]).
 
 responses_db(bye, [
-        [bye, '!'], 
-        [hope, to, see, you, again, '.'], 
-        [have, a, nice, day, '!']
+        ['Bye!'], 
+        ['Hope to see you again.'], 
+        ['Have a nice day!']
         ]).
 
 responses_db(greeting, [
         ['hello!'], 
-        ['hello,', nice, to, meet, 'you.'], 
-        [hi, 'there!']
+        ['Hello, nice to meet you.'], 
+        ['Hi there!']
         ]).
 
 responses_db(change_topic, [
         ['Do you mind if I ask you some questions?']
         ]).
 
+responses_db(get_location, [
+        ['Sorry, I don\'t know where that is.'],
+        ['Are you sure that\'s in Q block?'],
+        ['That\'s not in Q block...'],
+        ['Can you try that again?']
+        ]).
+
+responses_db(get_alevels, [
+        ['Haven\'t heard of that one before!'],
+        ['That\'s not a real subject...']
+        ]).
+               
 greeting_db([
         hello, 
         hi, 

@@ -4,6 +4,25 @@
 %
 % Description:  
 
+% Feedback items:
+%       - Do you think the talk given was informative?
+%       - Was the open day well organised?
+%       - 
+%       - 
+%
+% Information items:
+%       - Where is he/she from?
+%       - Which other universities has he/she applied to?
+%       - 
+%       - 
+%
+% Compulsory questions to be asked:
+%       - What is your name?
+%       - What are you studying?
+%       - Where is the reception?
+%       - Is there a cafe in this building?
+%       - How do I get out of this building?
+
 :- [map, database, route, pattern, readin, english, lib].
 :- use_module(library(random)).
 
@@ -16,6 +35,7 @@ conversations:-
 	repeat, % prolog built-in which repeats through backtracking 
 	print_prompt(you),
 	readin(S),
+        assert(conversation(S)),
 	gen_reply(S,R),
 	print_prompt(me),
 	write_list(R),
@@ -37,6 +57,8 @@ gen_reply(S, R):-
 gen_reply(S, R):- 
         pattern_where_is(S, X), !,
         (info(D, X); next(X,_,_,_,_)),
+        print_prompt(me),
+        write('Where are you at the moment?'), nl,
         get_location,
         location(Y),
         find_route(Y, D, R),
@@ -56,6 +78,8 @@ gen_reply(S,Reply):-
 % start asking questions
 gen_reply(S, R):-
         \+is_question(S), !,
+        print_prompt(me),
+        write('What subjects are you taking?'), nl,
         get_alevel_info_loop,
         R = ['Thanks', for, the, 'info!'].
 % totally random, last resort
@@ -76,25 +100,30 @@ is_quit(S):-
         print_report, !.
 
 get_location:-
-        print_prompt(me),
-        write('Where are you at the moment?'), nl,
         print_prompt(you),
         readin(L),
         get_location(L).
 get_location(X):-
         is_valid_loc(X, L), 
         assert(location(L)), !.
-get_location(_):- get_location.
+get_location(_):- 
+        responses_db(get_location, D),
+        random_pick(D, R),
+        print_prompt(me),
+        write_list(R),
+        get_location.
 
 get_alevel_info_loop:-
-	print_prompt(me),
-	write_list(['What', subjects, are, you, taking, '?']),
 	print_prompt(you),
 	readin(S),
 	get_alevel_info_loop(S).
 get_alevel_info_loop(S):- 
 	is_valid_alevel(S), !.
 get_alevel_info_loop(_):- 
+        responses_db(get_alevels, D),
+        random_pick(D, R),
+        print_prompt(me),
+        write_list(R),
         get_alevel_info_loop.
 
 is_valid_alevel(S):- 
