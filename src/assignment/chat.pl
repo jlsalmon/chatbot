@@ -42,11 +42,13 @@ conversations:-
 	is_quit(S).
 
 % check for "bye"
-gen_reply(S, R):- is_quit(S), !,
+gen_reply(S, R):- 
+        is_quit(S), !,
 	responses_db(bye, Res), 
 	random_pick(Res, R).
 % check for greeting
-gen_reply(S, R):- is_greeting(S), !,
+gen_reply(S, R):- 
+        is_greeting(S), !,
 	responses_db(greeting, Res), 
 	random_pick(Res, R).
 % give a route
@@ -64,10 +66,15 @@ gen_reply(S, R):-
         find_route(Y, D, R),
         retract(location(Y)).
 % asking my name?
-gen_reply(S, R):-
-        pattern_name(S, _), !,
-        responses_db(my_name, D),
-        random_pick(D, R).
+gen_reply(S,Reply):- 
+        question(Tree2, S, _Rest), !, 
+        mapping(s2name,Tree1, Tree2),
+        sentence(Tree1, Rep,[]),
+        append([yes, ','|Rep], ['!'], Reply).
+%gen_reply(S, R):-
+%        pattern_name(S, _), !,
+%        responses_db(my_name, D),
+%        random_pick(D, R).
 % map to why question
 gen_reply(S,Reply):- 
 	sentence(Tree1, S, _Rest), !, 
@@ -161,5 +168,7 @@ random_pick(Res, R):-
 
 print_report:-
 	alevel(X), write(X), write(' '), retract(alevel(X)), fail.
+print_report:-
+        nl, conversation(X), write(X), write(' '), retract(conversation(X)), fail.
 print_report:- nl.
 

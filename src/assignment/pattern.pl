@@ -25,6 +25,7 @@ pattern_where_is([where, is, X |_], X):-!.
 pattern_where_is([where, can, i, find, the, X |_], X):-!.
 pattern_where_is([where, can, i, find, a, X |_], X):-!.
 pattern_where_is([where, can, i, find, X |_], X):-!.
+pattern_where_is([how, do, i, get, to, X |_], X):-!.
 pattern_where_is([_|T], X):-
         pattern_where_is(T, X).
 

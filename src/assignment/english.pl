@@ -17,6 +17,8 @@ sentence(s(X, Y)) --> determiner(X), place_name(Y).
 
 sentence(s(X, Y)) --> subject_tobe_verb(X), prepositional_phrase(Y).
 
+sentence(s(X, Y)) --> object_pronoun(X), noun(Y).
+
 subject_phrase(sp(X)) --> subject_pronoun(X).
 subject_phrase(sp(X)) --> noun_phrase(X).
 
@@ -74,7 +76,7 @@ noun(noun(cs_course)) --> [cs_course].
 noun(noun(robotics_course)) --> [robotics_course].
 noun(noun(robotics_course)) --> [computing_course].
 noun(noun(robotics_course)) --> [sd_course].
-noun(noun(name)) --> ['ChatBot'].
+noun(noun(name)) --> [name].
 
 adverb(ad([very, much])) --> [very, much].
 adverb(ad([])) --> [].
@@ -200,8 +202,8 @@ mapping(s2q, % type of mapping is from a sentence to question
          ) 
 	) :- 
 	mapping_spn(N1, P1), mapping_opn(N2, P2). 
-mapping(s2q, % 
-	       % e.g [i,love,uwe] => [do,you,love,uwe] 
+
+mapping(s2q, % e.g [i,love,uwe] => [do,you,love,uwe] 
 	s(
             sp(spn(N1)),
             vb(V),
@@ -224,22 +226,18 @@ mapping(s2q, %
 	) :- 
 	mapping_spn(N1, P1).
 
-mapping(s2name,
+mapping(s2name,% your name -> my name
         s(
-            sp(spn(What)),
-            vb(Is),
-            op(
-                 np(noun(N2)),
-                 ad(X)
-              )
+            what, is,
+            sp(spn(N1)),
+            np(noun(N2))          
          ),
         q(
             sp(spn(P1)),
-            name, is,
-            np(noun(name))
+            np(noun(P2))
          )
         ):-
-        mapping_spn(N1, P1).
+        mapping_spn(N1, P1), mapping_opn(N2, P2).
 
 mapping_spn(i,you).
 mapping_spn(you,i).
@@ -248,6 +246,8 @@ mapping_spn(your,my).
 
 mapping_opn(you,me).
 mapping_opn(me,you).
+mapping_opn(name, 'ChatBot').
+mapping_opn('ChatBot', name).
 
 /* 
 
