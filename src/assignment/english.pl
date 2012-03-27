@@ -4,7 +4,7 @@
 %
 % Description:  
 
-:-[map]. % needed for defining place names
+:-[map].
 
 /* version 2 - add parse tree */
 
@@ -17,7 +17,7 @@ sentence(s(X, Y)) --> determiner(X), place_name(Y).
 
 sentence(s(X, Y)) --> subject_tobe_verb(X), prepositional_phrase(Y).
 
-sentence(s(X, Y)) --> object_pronoun(X), noun(Y).
+sentence(s(X, Y, Z)) --> question(X), object_pronoun(Y), noun(Z).
 
 subject_phrase(sp(X)) --> subject_pronoun(X).
 subject_phrase(sp(X)) --> noun_phrase(X).

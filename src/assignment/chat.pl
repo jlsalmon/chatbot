@@ -63,35 +63,35 @@ gen_reply(S, R):- % asking my name?
         mapping(s2name,Tree1, Tree2),
         sentence(Tree1, Rep,[]),
         append([yes, ','|Rep], ['!'], R).
-gen_reply(S, R):- % asking my name?
-        pattern_name(S, _), !,
-        responses_db(my_name, D),
-        random_pick(D, R).
-gen_reply(S, R):- % map to why question
-	sentence(Tree1, S, _Rest), !, 
-	mapping(s2why,Tree1, Tree2),
-	question(Tree2, Rep,[]),
-	append(Rep, ['?'], R).
-gen_reply(S, R):- % map to question
-	question(Tree2, S, _Rest), !, 
-	mapping(s2q,Tree1, Tree2),
-	sentence(Tree1, Rep,[]),
-	append([yes, ','|Rep], ['!'], R).
-gen_reply(S, R):- % get information
-        \+ is_question(S), 
-        \+ information(_, _), !,
-        get_info(4),
-        responses_db(thanks, D),
-        random_pick(D, R).
-gen_reply(S, R):- % get feedback
-        \+ is_question(S), 
-        \+ feedback(_, _), !,
-        get_feedback(4),
-        responses_db(thanks, D),
-        random_pick(D, R).
-gen_reply(_, R):- % totally random, last resort
-	responses_db(random, Res),
-	random_pick(Res, R).
+%gen_reply(S, R):- % asking my name?
+%        pattern_name(S, _), !,
+%        responses_db(my_name, D),
+%        random_pick(D, R).
+%gen_reply(S, R):- % map to why question
+%	sentence(Tree1, S, _Rest), !, 
+%	mapping(s2why,Tree1, Tree2),
+%	question(Tree2, Rep,[]),
+%	append(Rep, ['?'], R).
+%gen_reply(S, R):- % map to question
+%	question(Tree2, S, _Rest), !, 
+%	mapping(s2q,Tree1, Tree2),
+%	sentence(Tree1, Rep,[]),
+%	append([yes, ','|Rep], ['!'], R).
+%gen_reply(S, R):- % get information
+%        \+ is_question(S), 
+%        \+ information(_, _), !,
+%        get_info(4),
+%        responses_db(thanks, D),
+%        random_pick(D, R).
+%gen_reply(S, R):- % get feedback
+%        \+ is_question(S), 
+%        \+ feedback(_, _), !,
+%        get_feedback(4),
+%        responses_db(thanks, D),
+%        random_pick(D, R).
+%gen_reply(_, R):- % totally random, last resort
+%	responses_db(random, Res),
+%	random_pick(Res, R).
 
 % is_greeting(Sentence)
 % 
@@ -218,7 +218,7 @@ random_pick(Res, R):-
 %
 % 
 print_report:-
-        write('Conversation report:'),
+        write('\nConversation report:'),
 	alevel(X), write(X), write(' '), 
         retract(alevel(X)), fail.
 print_report:-

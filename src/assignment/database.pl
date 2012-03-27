@@ -63,8 +63,6 @@ responses_db(thanks, [
         ]).
 
 responses_db(random, [
-        ['Hello!'],
-        ['Hi there, this is not a Hello World program!'],
         ['Oh ... ok.'],
         ['Isn\'t it a nice day?'],
         ['Sorry, I\'m only a simple chatbot.'],
@@ -72,8 +70,11 @@ responses_db(random, [
         ['Can you say that again?'],
         ['Do you like UWE?'],
         ['Can we be friends?'],
-        ['Have you taked to me before?'],
-        ['...what do you mean?'] 
+        ['Have you talked to me before?'],
+        ['...what do you mean?'],
+        ['How impertinent.'],
+        ['You\'re quite rude, aren\'t you?'],
+        ['Don\t be silly.']
         ]).
 
 questions_db(feedback, [
