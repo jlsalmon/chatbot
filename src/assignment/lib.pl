@@ -38,24 +38,25 @@ nth_item([_|T], N, X):-
         nth_item(T, N1, X),
         N is N1 + 1.
 
-
-sublist(S, L) :-
-  append(_, L2, L),
-  append(S, _, L2).
-
+% contains(String, SubString)
+%
+% True if the substring exists in String.
 contains(A, B) :-
   atom(A),
   atom(B),
   name(A, AA),
   name(B, BB),
   contains(AA, BB).
-
 contains(A, B) :-
   atom(A),
   name(A, AA),
   contains(AA, B).
-
-%% The empty list is removed mainly for nicer output
 contains(A, B) :-
   sublist(B, A),
   B \= [].
+
+% sublist()
+sublist(S, L) :-
+  append(_, L2, L),
+  append(S, _, L2).
+
