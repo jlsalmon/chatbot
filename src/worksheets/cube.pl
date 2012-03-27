@@ -25,17 +25,6 @@ next(e,g, north).
 next(f,h, north).
 next(g,h, east).
 
-/*cango(X,Y):- arrow(X,Y).
-
-cango(X,Y):- arrow(X,Z), cango(Z,Y).*/
-
-cango2(X,Y,1):- arrow(X,Y).
-
-cango2(X,Y,N):- 
-        arrow(X,Z), 
-        cango2(Z,Y,Count),
-        N is Count + 1.
-
 /******************************************************************
 
 Output

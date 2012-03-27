@@ -42,41 +42,41 @@ gen_reply(S, R):- % check for "bye"
         is_quit(S), !,
 	responses_db(bye, Res), 
 	random_pick(Res, R).
-gen_reply(S, R):- % check for greeting
-        is_greeting(S), !,
-	responses_db(greeting, Res), 
-	random_pick(Res, R).
-gen_reply(S, R):- % give a route
-	pattern_to_from(S, X, Y), !,
-	find_route(X, Y, R).
-gen_reply(S, R):- % give directions
-        pattern_where_is(S, X), !,
-        (info(D, X); next(X,_,_,_,_)),
-        print_prompt(me),
-        write('Where are you at the moment?'), nl,
-        get_location,
-        loc(Y),
-        find_route(Y, D, R),
-        retract(loc(Y)).
+%gen_reply(S, R):- % check for greeting
+%        is_greeting(S), !,
+%	responses_db(greeting, Res), 
+%	random_pick(Res, R).
+%gen_reply(S, R):- % give a route
+%	pattern_to_from(S, X, Y), !,
+%	find_route(X, Y, R).
+%gen_reply(S, R):- % give directions
+%        pattern_where_is(S, X), !,
+%        (info(D, X); next(X,_,_,_,_)),
+%        print_prompt(me),
+%        write('Where are you at the moment?'), nl,
+%        get_location,
+%        loc(Y),
+%        find_route(Y, D, R),
+%        retract(loc(Y)).
 gen_reply(S, R):- % asking my name?
         question(Tree2, S, _Rest), !, 
         mapping(s2name,Tree1, Tree2),
         sentence(Tree1, Rep,[]),
-        append([yes, ','|Rep], ['!'], R).
+        append(Rep, ['!'], R).
 %gen_reply(S, R):- % asking my name?
 %        pattern_name(S, _), !,
 %        responses_db(my_name, D),
 %        random_pick(D, R).
-%gen_reply(S, R):- % map to why question
-%	sentence(Tree1, S, _Rest), !, 
-%	mapping(s2why,Tree1, Tree2),
-%	question(Tree2, Rep,[]),
-%	append(Rep, ['?'], R).
-%gen_reply(S, R):- % map to question
-%	question(Tree2, S, _Rest), !, 
-%	mapping(s2q,Tree1, Tree2),
-%	sentence(Tree1, Rep,[]),
-%	append([yes, ','|Rep], ['!'], R).
+gen_reply(S, R):- % map to why question
+	sentence(Tree1, S, _Rest), !, 
+	mapping(s2why,Tree1, Tree2),
+	question(Tree2, Rep,[]),
+	append(Rep, ['?'], R).
+gen_reply(S, R):- % map to question
+	question(Tree2, S, _Rest), !, 
+	mapping(s2q,Tree1, Tree2),
+	sentence(Tree1, Rep,[]),
+	append([yes, ','|Rep], ['!'], R).
 %gen_reply(S, R):- % get information
 %        \+ is_question(S), 
 %        \+ information(_, _), !,
@@ -89,9 +89,9 @@ gen_reply(S, R):- % asking my name?
 %        get_feedback(4),
 %        responses_db(thanks, D),
 %        random_pick(D, R).
-%gen_reply(_, R):- % totally random, last resort
-%	responses_db(random, Res),
-%	random_pick(Res, R).
+gen_reply(_, R):- % totally random, last resort
+	responses_db(random, Res),
+	random_pick(Res, R).
 
 % is_greeting(Sentence)
 % 

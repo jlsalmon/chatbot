@@ -8,7 +8,7 @@ Inductive definition for cango3(X, Y, Steps, Path)
 			and Path = X + SubPath.
 
 ******************************************************************/
-
+:- [cube].
 
 cango3(X, Y, 1, [X,Y]):- arrow(X, Y).
 

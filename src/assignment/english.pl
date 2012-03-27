@@ -8,6 +8,49 @@
 
 /* version 2 - add parse tree */
 
+question( q( what , is, X, Y)) -->  [what, is],  belonging_phrase(X),  abstract_noun((Y,_)).
+
+sentence(s(X,Y, is, Z)) --> belonging_phrase(X), abstract_noun((Y,Tag)),  [is],  special_noun((Tag,Z)).
+
+abstract_noun((name, personname)) --> [name].
+abstract_noun((hobby, activities)) --> [hobby].
+abstract_noun((major, subjects)) --> [major].
+
+special_noun((personname,justin)) --> [justin].
+sepcial_noun((personname,chatbot)) --> [chatbot].
+
+sepcial_noun((subjects, computer_science)) --> [computer_science].
+sepcial_noun((subjects, physics)) --> [physics].
+
+special_noun((activities, chatting)) --> [chatting].
+special_noun((activities, swimming)) --> [swimming].
+
+
+question( q( what, is, X, Y ) ) -->  [what, is],  belonging_phrase(X),  abstract_noun(Y).   % for what is ...
+
+sentence( s(X,Y, is, Z) ) --> belonging_phrase(X), abstract_noun(Y),  [is],  special_noun(Z).
+
+belonging_phrase(belong(your)) --> [your].
+belonging_phrase(belong(my)) --> [my].
+
+abstract_noun(abs_noun(name)) --> [name].
+
+special_noun(sp_noun(justin)) --> [justin].
+special_noun(sp_noun(derek)) --> [derek].
+
+mapping(s2name,% what is your name -> my name is X
+        s( belong(Y1), abs_noun(X2), is, sp_noun(Y2) ),
+        q( what, is, belong(X1), abs_noun(X2) )
+        ):-
+        mapping_belong(X1, Y1), mapping_noun(X2, Y2).
+
+mapping_belong(my,your).
+mapping_belong(your,my).
+
+mapping_noun(name, derek).
+mapping_noun(derek, name).
+
+
 sentence(s(X, Y, Z)) --> 
 	subject_phrase(X), verb(Y), object_phrase(Z).
 
@@ -226,28 +269,13 @@ mapping(s2q, % e.g [i,love,uwe] => [do,you,love,uwe]
 	) :- 
 	mapping_spn(N1, P1).
 
-mapping(s2name,% your name -> my name
-        s(
-            what, is,
-            sp(spn(N1)),
-            np(noun(N2))          
-         ),
-        q(
-            sp(spn(P1)),
-            np(noun(P2))
-         )
-        ):-
-        mapping_spn(N1, P1), mapping_opn(N2, P2).
+
 
 mapping_spn(i,you).
 mapping_spn(you,i).
-mapping_spn(my,your).
-mapping_spn(your,my).
 
 mapping_opn(you,me).
 mapping_opn(me,you).
-mapping_opn(name, 'ChatBot').
-mapping_opn('ChatBot', name).
 
 /* 
 

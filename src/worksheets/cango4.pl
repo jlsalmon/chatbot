@@ -4,6 +4,7 @@ cango4(X, Y, Steps, Path, Direction).
 
 ******************************************************************/
 
+:- [cube].
 
 cango4(X, Y, 1, [X,Y], [Direction]):- next(X, Y, Direction).
 

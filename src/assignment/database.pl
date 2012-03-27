@@ -2,7 +2,7 @@
 % Author:       Justin Lewis Salmon
 % Student ID:   10000937
 %
-% Description:  Contains databases for general use throughout the chatbot
+% Description:  Contains databases for general use throughout the Derek
 %               program.
 
 responses_db(bye, [
@@ -40,10 +40,10 @@ responses_db(get_name, [
         ]).
             
 responses_db(my_name, [
-        ['My name is CHATBOT, nice to meet you.'],
-        ['I\'m CHATBOT!'],
+        ['My name is Derek, nice to meet you.'],
+        ['I\'m Derek!'],
         ['My name isn\'t important right now.'],
-        ['CHATBOT, at your service, how may I help?']
+        ['Derek, at your service, how may I help?']
         ]).
 
 responses_db(my_subjects, [
@@ -65,7 +65,7 @@ responses_db(thanks, [
 responses_db(random, [
         ['Oh ... ok.'],
         ['Isn\'t it a nice day?'],
-        ['Sorry, I\'m only a simple chatbot.'],
+        ['Sorry, I\'m only a simple Derek.'],
         ['Sorry, I can\'t remember everything you said...'],
         ['Can you say that again?'],
         ['Do you like UWE?'],

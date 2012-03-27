@@ -7,6 +7,7 @@ Inductive definition for cango2(X, Y, Steps)
 			then Steps = SubSteps + 1.
 
 ******************************************************************/
+:- [cube].
 
 cango2(X, Y, 1):- arrow(X, Y).
 
