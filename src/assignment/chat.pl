@@ -15,13 +15,18 @@
 :- use_module(library(random)).
 :- dynamic usr_name/2, information/2, feedback/2, alevel/1.
 
+% chat/0
+%
 % top level call
 chat:-
 	print_welcome, nl,
 	conversations.
 
+% conversations/0
+%
+% Main chatbot backtracking loop. Repeats until user enters "bye".
 conversations:-
-	repeat, % prolog built-in which repeats through backtracking 
+	repeat, % repeat through backtracking 
 	print_prompt(you),
 	readin(S),
 	gen_reply(S,R),
@@ -30,22 +35,21 @@ conversations:-
 	is_quit(S), 
         print_report, !.
 
-% check for "bye"
-gen_reply(S, R):- 
+% gen_reply/2
+%
+% 
+gen_reply(S, R):- % check for "bye"
         is_quit(S), !,
 	responses_db(bye, Res), 
 	random_pick(Res, R).
-% check for greeting
-gen_reply(S, R):- 
+gen_reply(S, R):- % check for greeting
         is_greeting(S), !,
 	responses_db(greeting, Res), 
 	random_pick(Res, R).
-% give a route
-gen_reply(S, R):- 
+gen_reply(S, R):- % give a route
 	pattern_to_from(S, X, Y), !,
 	find_route(X, Y, R).
-% give directions
-gen_reply(S, R):- 
+gen_reply(S, R):- % give directions
         pattern_where_is(S, X), !,
         (info(D, X); next(X,_,_,_,_)),
         print_prompt(me),
@@ -54,46 +58,44 @@ gen_reply(S, R):-
         loc(Y),
         find_route(Y, D, R),
         retract(loc(Y)).
-% asking my name?
-gen_reply(S,Reply):- 
+gen_reply(S, R):- % asking my name?
         question(Tree2, S, _Rest), !, 
         mapping(s2name,Tree1, Tree2),
         sentence(Tree1, Rep,[]),
-        append([yes, ','|Rep], ['!'], Reply).
-gen_reply(S, R):-
+        append([yes, ','|Rep], ['!'], R).
+gen_reply(S, R):- % asking my name?
         pattern_name(S, _), !,
         responses_db(my_name, D),
         random_pick(D, R).
-% map to why question
-gen_reply(S,Reply):- 
+gen_reply(S, R):- % map to why question
 	sentence(Tree1, S, _Rest), !, 
 	mapping(s2why,Tree1, Tree2),
 	question(Tree2, Rep,[]),
-	append(Rep, ['?'], Reply).
-% map to question
-gen_reply(S,Reply):- 
+	append(Rep, ['?'], R).
+gen_reply(S, R):- % map to question
 	question(Tree2, S, _Rest), !, 
 	mapping(s2q,Tree1, Tree2),
 	sentence(Tree1, Rep,[]),
-	append([yes, ','|Rep], ['!'], Reply).
-% start asking questions
-gen_reply(S, R):-
-        \+ is_question(S), !,
-        \+ information(_, _),
+	append([yes, ','|Rep], ['!'], R).
+gen_reply(S, R):- % get information
+        \+ is_question(S), 
+        \+ information(_, _), !,
         get_info(4),
         responses_db(thanks, D),
         random_pick(D, R).
-gen_reply(S, R):-
+gen_reply(S, R):- % get feedback
         \+ is_question(S), 
         \+ feedback(_, _), !,
         get_feedback(4),
         responses_db(thanks, D),
         random_pick(D, R).
-% totally random, last resort
-gen_reply(_, R):-
+gen_reply(_, R):- % totally random, last resort
 	responses_db(random, Res),
 	random_pick(Res, R).
 
+% is_greeting(Sentence)
+% 
+% True if the sentence matches any greetings in the database.
 is_greeting(S):-
         greeting_db(D),
         intersect(S, D, A),
@@ -142,22 +144,36 @@ get_info(N):-
         write_list(Q),
         print_prompt(you),
         readin(R),
-        get_info(Q, R, N),
+        assert(information(Q, R)),
+        %get_info(Q, R),
         M is N - 1,
         get_info(M).
-get_info(QL, RL, N):-
-        nth_item(QL, 1, Q),
-        contains(Q, name),
-        ((nth_item(RL, 1, R),
-         name(R),
-         assert(usr_name(Q, R)))
-        ;
-        (responses_db(get_name, D), 
-         random_pick(D, X), 
-         print_prompt(me),
-         write_list(X),
-         get_info(N))).
- 
+%get_info(QL, RL):-
+%        nth_item(QL, 1, Q),
+%        contains(Q, name),
+%        get_usr_name(Q, RL).
+%get_info(QL, RL):-
+%        nth_item(QL, 1, Q),
+%        contains(Q, subjects),
+%        get_alevel_info_loop.
+
+get_usr_name(Q, RL):-
+        is_valid_name(RL), !,
+        assert(usr_name(Q, RL)).
+get_usr_name(Q, RL):-
+        responses_db(get_name, D), 
+        random_pick(D, X), 
+        print_prompt(me),
+        write_list(X),
+        get_usr_name(Q, RL).
+get_usr_name(Q, S):-
+        print_prompt(you),
+        readin(S),
+        get_usr_name(Q, S).
+
+is_valid_name(NL):-
+        nth_item(NL, 1, N),
+        name(N).
 
 get_alevel_info_loop:-
 	print_prompt(you),
@@ -198,6 +214,9 @@ random_pick(Res, R):-
         random(1, Upper, Rand),
         nth_item(Res, Rand, R).
 
+% print_report/0
+%
+% 
 print_report:-
         write('Conversation report:'),
 	alevel(X), write(X), write(' '), 
