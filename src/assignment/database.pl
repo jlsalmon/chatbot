@@ -36,7 +36,9 @@ responses_db(get_alevels, [
 responses_db(get_name, [
         ['Is that your real name?'],
         ['That\'s not your real name...'],
-        ['That can\'t be your name.']
+        ['That can\'t be your name.'],
+        ['Just tell me your name...'],
+        ['This is silly.']
         ]).
             
 responses_db(my_name, [
