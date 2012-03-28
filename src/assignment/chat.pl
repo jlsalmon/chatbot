@@ -4,12 +4,6 @@
 %
 % Description:  
 %
-% Compulsory questions to be asked:
-%       - What is your name?
-%       - What are you studying?
-%       - Where is the reception?
-%       - Is there a cafe in this building?
-%       - How do I get out of this building?
 
 :- [map, database, route, pattern, readin, english, lib, names].
 :- use_module(library(random)).
@@ -156,7 +150,7 @@ get_feedback(N):-
         M is N - 1,
         get_feedback(M).
 
-get_info(0).
+get_info(0):- !.
 get_info(N):-
         questions_db(info, D),
         nth_item(D, N, Q),
@@ -172,10 +166,11 @@ get_info(QL, RL):-
         nth_item(QL, 1, Q),
         contains(Q, name),
         get_usr_name(Q, RL).
-%get_info(QL, RL):-
+%get_info(QL, _):-
 %        nth_item(QL, 1, Q),
 %        contains(Q, subjects),
 %        get_alevel_info_loop.
+get_info(_, _).
 
 get_usr_name(_, RL):-
         is_valid_name(RL), !,
@@ -224,7 +219,7 @@ print_prompt(me):-
 print_prompt(you):-
 	user_icon(X), write(X), write(': '), flush_output.
 
-my_icon(chatbot).
+my_icon('Derek').
 user_icon(user).
 
 random_pick(Res, R):- 
