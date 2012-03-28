@@ -12,9 +12,11 @@ responses_db(bye, [
         ]).
 
 responses_db(greeting, [
-        ['hello!'], 
+        ['Hello!'], 
         ['Hello, nice to meet you.'], 
-        ['Hi there!']
+        ['Hi there!'],
+        ['Welcome!'],
+        ['Good afternoon!']
         ]).
 
 responses_db(change_topic, [
@@ -85,7 +87,7 @@ responses_db(random, [
         ['...what do you mean?'],
         ['How impertinent.'],
         ['You\'re quite rude, aren\'t you?'],
-        ['Don\t be silly.']
+        ['Don\'t be silly.']
         ]).
 
 questions_db(feedback, [

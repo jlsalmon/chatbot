@@ -52,7 +52,7 @@ gen_reply(S, R):- % give directions
         (info(D, X); next(X,_,_,_,_)),
         print_prompt(me),
         write('Where are you at the moment?'), nl,
-        get_location,
+        get_location(2),
         loc(Y),
         find_route(Y, D, R), !,
         retract(loc(Y)).
@@ -121,22 +121,28 @@ is_thanks(S):-
 is_quit(S):- 
         subset([bye], S).
 
-get_location:-
+get_location(0).
+get_location(N):-
         print_prompt(you),
         readin(L),
-        get_location(L).
-get_location(X):-
+        M is N - 1,
+        get_location(L, M).
+get_location(_, 0).
+get_location(X, _):-
         is_valid_loc(X, L), 
         assert(loc(L)), !.
-get_location(_):- 
+get_location(_, N):- 
         responses_db(get_location, D),
         random_pick(D, R),
         print_prompt(me),
         write_list(R),
-        get_location.
+        M is N - 1,
+        get_location(M).
 
-is_valid_loc([L|_], L):- 
-        next(L,_,_,_,_), !.
+is_valid_loc([H|_], L):- 
+        (info(L, H); next(H,_,_,_,_)), !.
+is_valid_loc([_|T], L):-
+        is_valid_loc(T, L).
 
 get_feedback(0).
 get_feedback(N):-
@@ -150,7 +156,7 @@ get_feedback(N):-
         M is N - 1,
         get_feedback(M).
 
-get_info(0):- !.
+get_info(0).
 get_info(N):-
         questions_db(info, D),
         nth_item(D, N, Q),
@@ -164,17 +170,17 @@ get_info(N):-
         get_info(M).
 get_info(QL, RL):-
         nth_item(QL, 1, Q),
-        contains(Q, name),
+        contains(Q, name), !,
         get_usr_name(Q, RL).
-%get_info(QL, _):-
-%        nth_item(QL, 1, Q),
-%        contains(Q, subjects),
-%        get_alevel_info_loop.
+get_info(QL, _):-
+        nth_item(QL, 1, Q),
+        contains(Q, subjects), !,
+        get_alevel_info_loop.
 get_info(_, _).
 
 get_usr_name(_, RL):-
-        is_valid_name(RL), !,
-        assert(usr_name(RL)).
+        is_valid_name(RL),
+        assert(usr_name(RL)), !.
 get_usr_name(Q, _):-
         responses_db(get_name, D), 
         random_pick(D, X), 
@@ -210,8 +216,10 @@ is_valid_alevel(S):-
         assert(alevel(A)).
 
 print_welcome:-
+        responses_db(greeting, D),
+        random_pick(D, W),
         print_prompt(me),
-	write('Welcome! I am a chatbot.'), 
+	write_list(W), 
 	flush_output. 
 
 print_prompt(me):-
@@ -219,8 +227,8 @@ print_prompt(me):-
 print_prompt(you):-
 	user_icon(X), write(X), write(': '), flush_output.
 
-my_icon('Derek').
-user_icon(user).
+my_icon('user 1').
+user_icon('user 2').
 
 random_pick(Res, R):- 
         length(Res, Length),  
@@ -233,7 +241,7 @@ random_pick(Res, R):-
 %
 % 
 print_report:-
-        write('\nConversation report:'),
+        write('\n--- Conversation report ---\n'),
 	usr_name(X), alevel(Y), 
         write_list(['User name:', X, 'Studying: ', Y]),
         retract(usr_name(X)), retract(alevel(Y)), fail.
