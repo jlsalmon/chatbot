@@ -51,7 +51,8 @@ responses_db(my_subjects, [
         ['Computer Science - it\'s great.'],
         ['Never mind about my subjects...'],
         ['Computer Science.'],
-        ['Why do you want to know what I\'m studying?']
+        ['Why do you want to know what I\'m studying?'],
+        ['Never mind that, what do you want?']
         ]).
 
 responses_db(thanks, [
@@ -60,6 +61,14 @@ responses_db(thanks, [
         ['Ok, thanks.'],
         ['Cheers for that.'],
         ['Nice one.']
+        ]).
+
+responses_db(thanked, [
+        ['You\'re welcome!'],
+        ['Any time.'],
+        ['Glad to be of service.'],
+        ['No worries.'],
+        ['No problem.']
         ]).
 
 responses_db(random, [
@@ -79,15 +88,15 @@ responses_db(random, [
 
 questions_db(feedback, [
         ['Okay. Do you think the talk given was informative?'],
-        ['Right. Do you think the open day was well organised?'],
-        ['Right, ok. Have the student ambassadors been helpful?'],
+        ['Hmm. Do you think the open day was well organised?'],
+        ['Ok, thanks. Have the student ambassadors been helpful?'],
         ['So, what are your thoughts on the open day overall?']
         ]).
 
 questions_db(info, [
-        ['So where are you from?'],
-        ['Which universities have you applied to (except UWE)?'],
-        ['Right, ok. So what A-level subjects are you taking?'],
+        ['Okay, so where are you from?'],
+        ['Haha, fair enough. Which universities have you applied to (except UWE)?'],
+        ['Nice to meet you. So what A-level subjects are you taking?'],
         ['What\'s your name?']
         ]).
 
@@ -95,6 +104,13 @@ greeting_db([
         hello, 
         hi, 
         hey
+        ]).
+
+thanks_db([
+        thanks,
+        thankyou,
+        thank,
+        cheers
         ]).
 
 alevel_db([maths,

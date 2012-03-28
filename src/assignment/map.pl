@@ -94,4 +94,10 @@ info('exit3', exit).
 info('exit4', exit).
 info('exit5', exit).
 info('exit6', exit).
+info('exit1', out).
+info('exit2', out).
+info('exit3', out).
+info('exit4', out).
+info('exit5', out).
+info('exit6', out).
 

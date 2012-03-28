@@ -8,27 +8,43 @@
 
 /* version 2 - add parse tree */
 
-question( q( what , is, X, Y)) -->  [what, is],  belonging_phrase(X),  abstract_noun((Y,_)).
+%question( q( what , is, X, Y)) -->  [what, is],  belonging_phrase(X),  abstract_noun((Y,_)).
+%
+%sentence(s(X,Y, is, Z)) --> belonging_phrase(X), abstract_noun((Y,Tag)),  [is],  special_noun((Tag,Z)).
+%
+%abstract_noun((name, personname)) --> [name].
+%abstract_noun((hobby, activities)) --> [hobby].
+%abstract_noun((major, subjects)) --> [major].
+%
+%special_noun((personname,justin)) --> [justin].
+%special_noun((personname,chatbot)) --> [chatbot].
+%
+%special_noun((subjects, computer_science)) --> [computer_science].
+%special_noun((subjects, physics)) --> [physics].
+%
+%special_noun((activities, chatting)) --> [chatting].
+%special_noun((activities, swimming)) --> [swimming].
+%
+%mapping(s2relate,% what is your name -> my name is X
+%        s( belong(Y1), abs_noun(X2), is, sp_noun(Y2) ),
+%        q( what, is, belong(X1), abs_noun(X2) )
+%        ):-
+%        mapping_belong(X1, Y1), mapping_noun(X2, Y2).
 
-sentence(s(X,Y, is, Z)) --> belonging_phrase(X), abstract_noun((Y,Tag)),  [is],  special_noun((Tag,Z)).
-
-abstract_noun((name, personname)) --> [name].
-abstract_noun((hobby, activities)) --> [hobby].
-abstract_noun((major, subjects)) --> [major].
-
-special_noun((personname,justin)) --> [justin].
-sepcial_noun((personname,chatbot)) --> [chatbot].
-
-sepcial_noun((subjects, computer_science)) --> [computer_science].
-sepcial_noun((subjects, physics)) --> [physics].
-
-special_noun((activities, chatting)) --> [chatting].
-special_noun((activities, swimming)) --> [swimming].
-
-
-question( q( what, is, X, Y ) ) -->  [what, is],  belonging_phrase(X),  abstract_noun(Y).   % for what is ...
 
 sentence( s(X,Y, is, Z) ) --> belonging_phrase(X), abstract_noun(Y),  [is],  special_noun(Z).
+
+sentence(s(X, Y, Z)) --> 
+	subject_phrase(X), verb(Y), object_phrase(Z).
+
+%sentence(s(X, Y, Z)) --> question(X), determiner(Y), place_name(Z).
+%
+%sentence(s(X, Y)) --> determiner(X), place_name(Y).
+
+sentence(s(X, Y)) --> subject_tobe_verb(X), prepositional_phrase(Y).
+
+%sentence(s(X, Y, Z)) --> question(X), object_pronoun(Y), noun(Z).
+
 
 belonging_phrase(belong(your)) --> [your].
 belonging_phrase(belong(my)) --> [my].
@@ -38,29 +54,6 @@ abstract_noun(abs_noun(name)) --> [name].
 special_noun(sp_noun(justin)) --> [justin].
 special_noun(sp_noun(derek)) --> [derek].
 
-mapping(s2name,% what is your name -> my name is X
-        s( belong(Y1), abs_noun(X2), is, sp_noun(Y2) ),
-        q( what, is, belong(X1), abs_noun(X2) )
-        ):-
-        mapping_belong(X1, Y1), mapping_noun(X2, Y2).
-
-mapping_belong(my,your).
-mapping_belong(your,my).
-
-mapping_noun(name, derek).
-mapping_noun(derek, name).
-
-
-sentence(s(X, Y, Z)) --> 
-	subject_phrase(X), verb(Y), object_phrase(Z).
-
-sentence(s(X, Y, Z)) --> question(X), determiner(Y), place_name(Z).
-
-sentence(s(X, Y)) --> determiner(X), place_name(Y).
-
-sentence(s(X, Y)) --> subject_tobe_verb(X), prepositional_phrase(Y).
-
-sentence(s(X, Y, Z)) --> question(X), object_pronoun(Y), noun(Z).
 
 subject_phrase(sp(X)) --> subject_pronoun(X).
 subject_phrase(sp(X)) --> noun_phrase(X).
@@ -165,6 +158,8 @@ question(q(do,S)) --> [do], sentence(S).
 question(q(where,is,S)) --> [where, is], sentence(S).
 question(q(what,is,S)) --> [what, is], sentence(S).
 
+question( q( what, is, X, Y ) ) -->  [what, is],  belonging_phrase(X),  abstract_noun(Y).   % for what is ...
+
 /* after added the above line, we can handle questions like:
 
 % 6
@@ -176,100 +171,43 @@ Tree = q(why,do,s(sp(spn(you)),vb(love),op(opn(me),ad([])))) ?
 /* version 4 add rules for changing a sentence to a question, vice versa */
 
 mapping(s2why, % type of mapping is from a sentence to why question
-	       % e.g [i,love,you] => [why,do,you,love,me] 
-	s(
-            sp(spn(N1)),
-            vb(V),
-            op(
-                 opn(N2), 
-                 ad(X)
-              )
-         ),
-	q(
-            why,do,
-            s(
-                sp(spn(P1)),
-                vb(V),
-                op(
-                     opn(P2),
-                     ad(X)
-                  )
-             )
-         ) 
-	) :- 
-	mapping_spn(N1, P1), mapping_opn(N2, P2). 
+               % e.g [i,love,you] => [why,do,you,love,me] 
+        s(sp(spn(N1)),vb(V),op(opn(N2),ad(X))),
+        q(why,do,s(sp(spn(P1)),vb(V),op(opn(P2),ad(X)))) 
+        ) :- 
+        mapping_spn(N1, P1), mapping_opn(N2, P2). 
 mapping(s2why, % 
-	       % e.g [i,love,uwe] => [why,do,you,love,uwe] 
-	s(
-            sp(spn(N1)),
-            vb(V),
-            op(
-                 np(noun(N2)),
-                 ad(X)
-              )
-         ),
-	q(
-            why,do,
-            s(
-                sp(spn(P1)),
-                vb(V),
-                op(
-                     np(noun(N2)),
-                     ad(X)
-                  )
-             )
-         ) 
-	) :- 
-	mapping_spn(N1, P1).
+               % e.g [i,love,uwe] => [why,do,you,love,uwe] 
+        s(sp(spn(N1)),vb(V),op(np(noun(N2)),ad(X))),
+        q(why,do,s(sp(spn(P1)),vb(V),op(np(noun(N2)),ad(X)))) 
+        ) :- 
+        mapping_spn(N1, P1).
+
 
 mapping(s2q, % type of mapping is from a sentence to question
-	       % e.g [i,love,uwe] => [do,you,love,me] 
-	s(
-            sp(spn(N1)),
-            vb(V),
-            op(
-                 opn(N2),
-                 ad(X)
-              )
-         ),
-	q(
-            do,
-            s(
-                sp(spn(P1)),
-                vb(V),
-                op(
-                     opn(P2),
-                     ad(X)
-                  )
-             )
-         ) 
-	) :- 
-	mapping_spn(N1, P1), mapping_opn(N2, P2). 
+               % e.g [i,love,uwe] => [do,you,love,me] 
+        s(sp(spn(N1)),vb(V),op(opn(N2),ad(X))),
+        q(do,s(sp(spn(P1)),vb(V),op(opn(P2),ad(X)))) 
+        ) :- 
+        mapping_spn(N1, P1), mapping_opn(N2, P2). 
+mapping(s2q, % 
+               % e.g [i,love,uwe] => [do,you,love,uwe] 
+        s(sp(spn(N1)),vb(V),op(np(noun(N2)),ad(X))),
+        q(do,s(sp(spn(P1)),vb(V),op(np(noun(N2)),ad(X)))) 
+        ) :- 
+        mapping_spn(N1, P1).
 
-mapping(s2q, % e.g [i,love,uwe] => [do,you,love,uwe] 
-	s(
-            sp(spn(N1)),
-            vb(V),
-            op(
-                 np(noun(N2)),
-                 ad(X)
-              )
-         ),
-	q(
-            do,
-            s(
-                sp(spn(P1)),
-                vb(V),
-                op(
-                     np(noun(N2)),
-                     ad(X)
-                  )
-             )
-         ) 
-	) :- 
-	mapping_spn(N1, P1).
+mapping(s2name,% what is your name -> my name is X
+        s( belong(Y1), abs_noun(X2), is, sp_noun(Y2) ),
+        q( what, is, belong(X1), abs_noun(X2) )
+        ):-
+        mapping_belong(X1, Y1), mapping_noun(X2, Y2).
 
+mapping_belong(my,your).
+mapping_belong(your,my).
 
+mapping_noun(name, derek).
+mapping_noun(derek, name).
 
 mapping_spn(i,you).
 mapping_spn(you,i).

@@ -25,7 +25,9 @@ pattern_where_is([where, is, X |_], X):-!.
 pattern_where_is([where, can, i, find, the, X |_], X):-!.
 pattern_where_is([where, can, i, find, a, X |_], X):-!.
 pattern_where_is([where, can, i, find, X |_], X):-!.
+pattern_where_is([how, do, i, get, X |_], X):-!.
 pattern_where_is([how, do, i, get, to, X |_], X):-!.
+pattern_where_is([is, there, a, X |_], X):-!.
 pattern_where_is([_|T], X):-
         pattern_where_is(T, X).
 
@@ -37,4 +39,9 @@ pattern_name([who, are, you, X |_], X):-!.
 pattern_name([_|T], X):-
         pattern_name(T, X).
 
-
+pattern_my_subjects([what, are, you, studying, X |_], X):-!.
+pattern_my_subjects([what, do, you, study, X |_], X):-!.
+pattern_my_subjects([what, course, are, you, on, X |_], X):-!.
+pattern_my_subjects([what, is, your, degree, X |_], X):-!.
+pattern_my_subjects([_|T], X):-
+        pattern_my_subjects(T, X).
