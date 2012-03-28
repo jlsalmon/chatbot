@@ -52,7 +52,7 @@ belonging_phrase(belong(my)) --> [my].
 abstract_noun(abs_noun(name)) --> [name].
 
 special_noun(sp_noun(justin)) --> [justin].
-special_noun(sp_noun(derek)) --> [derek].
+special_noun(sp_noun(frank)) --> [frank].
 
 
 subject_phrase(sp(X)) --> subject_pronoun(X).
@@ -186,8 +186,8 @@ mapping(s2how, % how are you -> i am fine
 mapping_belong(my,your).
 mapping_belong(your,my).
 
-mapping_noun(name, derek).
-mapping_noun(derek, name).
+mapping_noun(name, frank).
+mapping_noun(frank, name).
 
 mapping_indicative(are, am).
 mapping_indicative(am, are).
@@ -195,8 +195,8 @@ mapping_indicative(am, are).
 mapping_ad(how, fine).
 mapping_ad(fine, how).
 
-mapping_spn(i,you).
-mapping_spn(you,i).
+mapping_spn(i, you).
+mapping_spn(you, i).
 
 mapping_opn(you,me).
 mapping_opn(me,you).

@@ -7,7 +7,7 @@
 
 :- [map, database, route, pattern, readin, english, lib, names].
 :- use_module(library(random)).
-:- dynamic usr_name/1, information/2, feedback/2, alevel/1, loc/1.
+:- dynamic usr_name/1, usr_location/1, information/2, feedback/2, alevel/1, loc/1.
 
 % chat/0
 %
@@ -51,12 +51,14 @@ gen_reply(S, R):- % give directions
         pattern_where_is(S, X), !,
         (info(D, X); next(X,_,_,_,_)),
         print_prompt(me),
-        write('Where are you at the moment?'), nl,
+        responses_db(location, D),
+        random_pick(D, R),
+        write_list(R),
         get_location(2),
         loc(Y),
         find_route(Y, D, R), !,
         retract(loc(Y)).
-gen_reply(S, R):- % asking my name?
+gen_reply(S, R):- % asking my name? (grammar)
         question(Tree2, S, _Rest), 
         mapping(s2name,Tree1, Tree2), !,
         sentence(Tree1, Rep,[]),
@@ -69,13 +71,15 @@ gen_reply(S, R):- % asking my subjects?
         pattern_my_subjects(S, _), !,
         responses_db(my_subjects, D),
         random_pick(D, R).
-
-gen_reply(S, R):- % asking how I am?
+gen_reply(S, R):- % asking how I am? (grammar)
         question(Tree2, S, _Rest), !, 
         mapping(s2how,Tree1, Tree2),
         sentence(Tree1, Rep,[]), !,
         append(Rep, ['!'], R).
-
+gen_reply(S, R):- % asking how I am (simple)?
+        pattern_me(S, _), !,
+        responses_db(me, D),
+        random_pick(D, R).
 gen_reply(S, R):- % map to why question
 	sentence(Tree1, S, _Rest), !, 
 	mapping(s2why,Tree1, Tree2),
@@ -105,9 +109,14 @@ gen_reply(S, R):- % get feedback
         get_feedback(4),
         responses_db(thanks, D),
         random_pick(D, R).
-gen_reply(_, R):- % totally random, last resort
-	responses_db(random, Res),
+gen_reply(S, R):- % ask a random question
+        \+ is_question(S), !,
+	responses_db(random_q, Res),
 	random_pick(Res, R).
+gen_reply(S, R):- % give a random answer
+        is_question(S), !,
+        responses_db(random_s, Res),
+        random_pick(Res, R).
 
 % is_greeting(Sentence)
 % 
@@ -209,7 +218,11 @@ get_info(QL, RL):-
 get_info(QL, _):-
         nth_item(QL, 1, Q),
         contains(Q, subjects), !,
-        get_alevel_info_loop.
+        get_alevel_info_loop(_).
+get_info(QL, RL):-
+        nth_item(QL, 1, Q),
+        contains(Q, from), !,
+        assert(user_location(RL)).
 get_info(_, _).
 
 % get_usr_name/1
@@ -220,8 +233,7 @@ get_usr_name(Q):-
         readin(S),
         get_usr_name(Q, S).
 get_usr_name(_, RL):-
-        is_valid_name(RL),
-        assert(usr_name(RL)), !.
+        is_valid_name(RL), !.
 get_usr_name(Q, _):-
         responses_db(get_name, D), 
         random_pick(D, X), 
@@ -234,7 +246,8 @@ get_usr_name(Q, _):-
 % Checks if the given list contains a name that is valid.
 is_valid_name(NL):-
         nth_item(NL, 1, N),
-        name(N).
+        name(N),
+        assert(usr_name(N)).
 
 % get_alevel_info_loop/0
 %
@@ -295,9 +308,9 @@ random_pick(Res, R):-
 % during chat.
 print_report:-
         write('\n--- Conversation report ---\n'),
-	usr_name(X), alevel(Y), 
-        write_list(['User name:', X, 'Studying: ', Y]),
-        retract(usr_name(X)), retract(alevel(Y)), fail.
+	usr_name(X), usr_location(Y), alevel(Z), 
+        write_list(['User name: ', X, 'From: ', Y, '\nStudying: ', Z]),
+        retract(usr_name(X)),retract(usr_location(Y)), retract(alevel(Z)), fail.
 print_report:-
         nl, feedback(X, Y), write(X), write(' : '), write_list(Y), 
         retract(feedback(X, Y)), fail.

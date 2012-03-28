@@ -52,3 +52,13 @@ pattern_my_subjects([what, course, are, you, on, X |_], X):-!.
 pattern_my_subjects([what, is, your, degree, X |_], X):-!.
 pattern_my_subjects([_|T], X):-
         pattern_my_subjects(T, X).
+
+% pattern_me/2
+%
+% Matches questions about how the chatbot is feeling.
+pattern_me([how, are, you, X |_], X):-!.
+pattern_me([are, you, ok, X |_], X):-!.
+pattern_me([you, ok, X |_], X):-!.
+pattern_me([you, okay, X |_], X):-!.
+pattern_me([_|T], X):-
+        pattern_me(T, X).

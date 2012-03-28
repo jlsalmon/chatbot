@@ -2,7 +2,7 @@
 % Author:       Justin Lewis Salmon
 % Student ID:   10000937
 %
-% Description:  Contains databases for general use throughout the Derek
+% Description:  Contains databases for general use throughout the chatbot
 %               program.
 
 responses_db(bye, [
@@ -16,38 +16,47 @@ responses_db(greeting, [
         ['Hello, nice to meet you.'], 
         ['Hi there!'],
         ['Welcome!'],
-        ['Good afternoon!']
+        ['Good afternoon!'],
+        ['Hi.']
         ]).
 
 responses_db(change_topic, [
         ['Do you mind if I ask you some questions?']
         ]).
 
+responses_db(location, [
+        ['Where are you at the moment?'],
+        ['What room are you in?'],
+        ['Where are you?'],
+        ['I\'m not telling!']
+        ]).
+
 responses_db(get_location, [
         ['Sorry, I don\'t know where that is.'],
         ['Are you sure that\'s in Q block?'],
         ['That\'s not in Q block...'],
-        ['Can you try that again?']
+        ['Can you try that again?'],
+        ['I don\'t know that room, where is it?']
         ]).
 
 responses_db(get_alevels, [
         ['Haven\'t heard of that one before!'],
-        ['That\'s not a real subject...']
+        ['That\'s not a real subject...'],
+        ['Are you sure?']
         ]).
 
 responses_db(get_name, [
         ['Is that your real name?'],
         ['That\'s not your real name...'],
         ['That can\'t be your name.'],
-        ['Just tell me your name...'],
-        ['This is silly.']
+        ['Just tell me your name...']
         ]).
             
 responses_db(my_name, [
-        ['My name is Derek, nice to meet you.'],
-        ['I\'m Derek!'],
+        ['My name is Frank, nice to meet you.'],
+        ['I\'m Frank!'],
         ['My name isn\'t important right now.'],
-        ['Derek, at your service, how may I help?']
+        ['Frank, at your service, how may I help?']
         ]).
 
 responses_db(my_subjects, [
@@ -64,7 +73,9 @@ responses_db(thanks, [
         ['Thanks, that\'s helpful.'],
         ['Ok, thanks.'],
         ['Cheers for that.'],
-        ['Nice one.']
+        ['Nice one.'],
+        ['Great!'],
+        ['Awesome']
         ]).
 
 responses_db(thanked, [
@@ -75,10 +86,18 @@ responses_db(thanked, [
         ['No problem.']
         ]).
 
-responses_db(random, [
-        ['Oh ... ok.'],
+responses_db(me, [
+        ['I\'m great, thanks for asking.'],
+        ['Can\'t complain!'],
+        ['Not too bad, yourself?'],
+        ['I\'m okay, I suppose...'],
+        ['Yep, I\'m fine, how are you?']
+        ]).
+
+responses_db(random_q, [
         ['Isn\'t it a nice day?'],
-        ['Sorry, I\'m only a simple Derek.'],
+        ['Sorry, I\'m only a simple Frank.'],
+        ['Oh... ok.'],
         ['Sorry, I can\'t remember everything you said...'],
         ['Can you say that again?'],
         ['Do you like UWE?'],
@@ -87,12 +106,25 @@ responses_db(random, [
         ['...what do you mean?'],
         ['How impertinent.'],
         ['You\'re quite rude, aren\'t you?'],
-        ['Don\'t be silly.']
+        ['Don\'t be silly.'],
+        ['This is silly.'],
+        ['Lol'],
+        [':)'],
+        ['Umm.. what?'],
+        ['Excuse me?']
+        ]).
+
+responses_db(random_s, [
+        ['I dunno...'],
+        ['Sorry, I can\'t answer that one.'],
+        ['Not sure!'],
+        ['Can I get a different question?'],
+        ['Oh, you\'ll have to ask someone else that.']
         ]).
 
 questions_db(feedback, [
-        ['Okay. Do you think the talk given was informative?'],
-        ['Hmm. Do you think the open day was well organised?'],
+        ['Okay. Did you find any of the talks interesting?'],
+        ['Hmm. Do you think the open day has been well organised?'],
         ['Ok, thanks. Have the student ambassadors been helpful?'],
         ['So, what are your thoughts on the open day overall?']
         ]).

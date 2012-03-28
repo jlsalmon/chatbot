@@ -87,8 +87,8 @@ info('2q4', toilet).
 info('2q5', toilet).
 info('2q21', toilet).
 info('2q23', toilet).
-info('area1', vending_machines).
-info('area3', vending_machines).
+info('area1', 'vending machine').
+info('area3', 'vending machine').
 info('area2', lockers).
 info('exit1', exit).
 info('exit2', exit).

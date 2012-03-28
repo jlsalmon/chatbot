@@ -23,7 +23,7 @@ read_in(P):-initread(L),words(P,L,[]).
 % 'get' is nolonger supported from Sicstus Prolog, so use get_code instead: 
 initread([K1,K2|U]):-get_code(K1),get_code(K2),readrest(K2,U).
 
-readrest(46,[]):-!.  % 46 ascii for '.'
+%readrest(46,[]):-!.  % 46 ascii for '.'
 readrest(63,[]):-!.  % 63 ascii for '?'
 readrest(33,[]):-!.  % 33 ascii for '!'
 readrest(10,[]):-!.  % 10 ascii for '\n' wrote by Justin :)
