@@ -2,8 +2,8 @@
 % Author:       Justin Lewis Salmon
 % Student ID:   10000937
 %
-% Description:  
-%
+% Description:  Main entry point for chatbot program. Handles the main
+%               interface, parsing user input and generating responses.
 
 :- [map, database, route, pattern, readin, english, lib, names].
 :- use_module(library(random)).
@@ -11,7 +11,7 @@
 
 % chat/0
 %
-% top level call
+% top level call, starts conversation loop
 chat:-
 	print_welcome,
 	conversations.

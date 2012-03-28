@@ -2,40 +2,18 @@
 % Author:       Justin Lewis Salmon
 % Student ID:   10000937
 %
-% Description:  
+% Description:  Contains English grammars and mappings for converting
+%               sentences to appropriate responses.
 
 :-[map].
 
-%question( q( what , is, X, Y)) -->  [what, is],  belonging_phrase(X),  abstract_noun((Y,_)).
-%
-%sentence(s(X,Y, is, Z)) --> belonging_phrase(X), abstract_noun((Y,Tag)),  [is],  special_noun((Tag,Z)).
-%
-%abstract_noun((name, personname)) --> [name].
-%abstract_noun((hobby, activities)) --> [hobby].
-%abstract_noun((major, subjects)) --> [major].
-%
-%special_noun((personname,justin)) --> [justin].
-%special_noun((personname,chatbot)) --> [chatbot].
-%
-%special_noun((subjects, computer_science)) --> [computer_science].
-%special_noun((subjects, physics)) --> [physics].
-%
-%special_noun((activities, chatting)) --> [chatting].
-%special_noun((activities, swimming)) --> [swimming].
-%
-%mapping(s2relate,% experimental
-%        s( belong(Y1), abs_noun(X2), is, sp_noun(Y2) ),
-%        q( what, is, belong(X1), abs_noun(X2) )
-%        ):-
-%        mapping_belong(X1, Y1), mapping_noun(X2, Y2).
+sentence( s(X,Y, is, Z) ) --> belonging_phrase(X), abstract_noun(Y),  
+                              [is],  special_noun(Z).
 
+sentence(s(X, Y, Z)) --> subject_pronoun(X), indicative_verb(Y), 
+                         adjective(Z).
 
-sentence( s(X,Y, is, Z) ) --> belonging_phrase(X), abstract_noun(Y),  [is],  special_noun(Z).
-
-sentence(s(X, Y, Z)) --> subject_pronoun(X), indicative_verb(Y), adjective(Z).
-
-sentence(s(X, Y, Z)) --> 
-	subject_phrase(X), verb(Y), object_phrase(Z).
+sentence(s(X, Y, Z)) --> subject_phrase(X), verb(Y), object_phrase(Z).
 
 sentence(s(X, Y, Z)) --> question(X), determiner(Y), place_name(Z).
 
@@ -44,7 +22,6 @@ sentence(s(X, Y)) --> determiner(X), place_name(Y).
 sentence(s(X, Y)) --> subject_tobe_verb(X), prepositional_phrase(Y).
 
 sentence(s(X, Y, Z)) --> question(X), object_pronoun(Y), noun(Z).
-
 
 belonging_phrase(belong(your)) --> [your].
 belonging_phrase(belong(my)) --> [my].
@@ -132,15 +109,14 @@ subject_tobe_verb(s_2b([we, are])) --> [we, are].
 adjective(adj(great)) --> [great].
 adjective(adj(good)) --> [good].
 adjective(adj(fine)) --> [fine].
-                          
-/*  version 3 add some questions */
 
 question(q(why,do,S)) --> [why, do], sentence(S).
 question(q(do,S)) --> [do], sentence(S).
 % for "how are you"
 question(q(X, Y, Z)) --> adverb(X), indicative_verb(Y), subject_pronoun(Z).
 % for "what is"
-question( q( what, is, X, Y ) ) -->  [what, is],  belonging_phrase(X),  abstract_noun(Y).   
+question( q( what, is, X, Y ) ) -->  [what, is],  belonging_phrase(X),  
+                                     abstract_noun(Y).   
 
 /* version 4 add rules for changing a sentence to a question, vice versa */
 
@@ -201,3 +177,29 @@ mapping_spn(you, i).
 mapping_opn(you,me).
 mapping_opn(me,you).
 
+% Experimental stuff
+%
+%question( q( what , is, X, Y)) -->  [what, is],  belonging_phrase(X),  
+%                                    abstract_noun((Y,_)).
+%
+%sentence(s(X,Y, is, Z)) --> belonging_phrase(X), abstract_noun((Y,Tag)),  
+%                            [is],  special_noun((Tag,Z)).
+%
+%abstract_noun((name, personname)) --> [name].
+%abstract_noun((hobby, activities)) --> [hobby].
+%abstract_noun((major, subjects)) --> [major].
+%
+%special_noun((personname,justin)) --> [justin].
+%special_noun((personname,chatbot)) --> [chatbot].
+%
+%special_noun((subjects, computer_science)) --> [computer_science].
+%special_noun((subjects, physics)) --> [physics].
+%
+%special_noun((activities, chatting)) --> [chatting].
+%special_noun((activities, swimming)) --> [swimming].
+%
+%mapping(s2relate,% experimental
+%        s( belong(Y1), abs_noun(X2), is, sp_noun(Y2) ),
+%        q( what, is, belong(X1), abs_noun(X2) )
+%        ):-
+%        mapping_belong(X1, Y1), mapping_noun(X2, Y2).
