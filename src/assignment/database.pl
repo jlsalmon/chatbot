@@ -42,14 +42,18 @@ responses_db(get_location, [
 responses_db(get_alevels, [
         ['Haven\'t heard of that one before!'],
         ['That\'s not a real subject...'],
-        ['Are you sure?']
+        ['Are you sure?'],
+        ['Hold on, I need to know about your A-levels!'],
+        ['Don\'t you want to tell me your A-levels?']
         ]).
 
 responses_db(get_name, [
         ['Is that your real name?'],
         ['That\'s not your real name...'],
         ['That can\'t be your name.'],
-        ['Just tell me your name...']
+        ['Just tell me your name...'],
+        ['I need to know your name!'],
+        ['Come on, what are you called?']
         ]).
             
 responses_db(my_name, [
@@ -96,10 +100,7 @@ responses_db(me, [
 
 responses_db(random_q, [
         ['Isn\'t it a nice day?'],
-        ['Sorry, I\'m only a simple Frank.'],
         ['Oh... ok.'],
-        ['Sorry, I can\'t remember everything you said...'],
-        ['Can you say that again?'],
         ['Do you like UWE?'],
         ['Can we be friends?'],
         ['Have you talked to me before?'],
@@ -119,7 +120,14 @@ responses_db(random_s, [
         ['Sorry, I can\'t answer that one.'],
         ['Not sure!'],
         ['Can I get a different question?'],
-        ['Oh, you\'ll have to ask someone else that.']
+        ['Oh, you\'ll have to ask someone else that.'],
+        ['Sorry, I\'m only a simple Frank.'],
+        ['Sorry, I can\'t remember everything you said...'],
+        ['Can you say that again?'],
+        ['Now, there\'s a question.'],
+        ['Who knows!'],
+        ['No. Just no.'],
+        ['Yes, I agree.']
         ]).
 
 questions_db(feedback, [

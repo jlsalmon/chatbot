@@ -215,14 +215,14 @@ get_info(QL, RL):-
         nth_item(QL, 1, Q),
         contains(Q, name), !,
         get_usr_name(Q, RL).
-get_info(QL, _):-
+get_info(QL, RL):-
         nth_item(QL, 1, Q),
         contains(Q, subjects), !,
-        get_alevel_info_loop(_).
+        get_alevel_info_loop(RL).
 get_info(QL, RL):-
         nth_item(QL, 1, Q),
         contains(Q, from), !,
-        assert(user_location(RL)).
+        assert(usr_location(RL)).
 get_info(_, _).
 
 % get_usr_name/1
@@ -309,7 +309,7 @@ random_pick(Res, R):-
 print_report:-
         write('\n--- Conversation report ---\n'),
 	usr_name(X), usr_location(Y), alevel(Z), 
-        write_list(['User name: ', X, 'From: ', Y, '\nStudying: ', Z]),
+        write_list(['User name: ', X, '\nFrom: ', Y, '\nStudying: ', Z]),
         retract(usr_name(X)),retract(usr_location(Y)), retract(alevel(Z)), fail.
 print_report:-
         nl, feedback(X, Y), write(X), write(' : '), write_list(Y), 
