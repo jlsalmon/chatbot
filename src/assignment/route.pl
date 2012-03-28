@@ -6,7 +6,8 @@
 %               map structure defined in map.pl.
                 
 
-% find_route(Origin, Destination, Route)
+% find_route/3
+% (Origin, Destination, Route)
 %
 % Finds a route between any two places on the map and builds a list of 
 % user-friendly printable directions in R.
@@ -15,7 +16,8 @@ find_route(X, Y, R):-
 	simp_route(Dir, Dist, NewDir, NewDist),
 	print_route(X, Y, NewDir, NewDist, R).
 
-% calc_route(Origin, Destination, Direction, DirectionList, DistanceList, Path)
+% calc_route/6
+% (Origin, Destination, Direction, DirectionList, DistanceList, Path)
 %
 % Calculates a route from Origin to Destination, building up lists of directions,
 % distances and the path taken.
@@ -27,13 +29,15 @@ calc_route(X, Y, PreDir, [Dir | SubDir], [Dist | SubDist], [X | SubPath]):-
 	\+u_turn(PreDir, Dir),
 	calc_route(Z, Y, Dir, SubDir, SubDist, SubPath).
 	
-% u_turn(Direction, Direction)
+% u_turn/2
+% (Direction, Direction)
 %
 % Defines the set of 180 degree turns.
 u_turn(south, north). u_turn(north, south).
 u_turn(east, west). u_turn(west, east).
 
-% simp_route(DirectionList, DistanceList, NewDirList, NewDistList)
+% simp_route/4
+% (DirectionList, DistanceList, NewDirList, NewDistList)
 %
 % Simplifies a list of directions and distances to its most compact form.
 simp_route([L1], [L2], [L1], [L2]). 
@@ -44,7 +48,8 @@ simp_route([H1, H1|T1], [H2, HT2|T2], SubDir, SubDist):-
 	NewDist is H2 + HT2,
 	simp_route([H1|T1], [NewDist | T2], SubDir, SubDist).
 
-% print_route(Origin, Destination, DirectionList, DistanceList, String)
+% print_route/5
+% (Origin, Destination, DirectionList, DistanceList, String)
 %
 % Builds a human-readable list of strings that represent directions from Origin
 % to Destination using Directions and Distances.

@@ -23,7 +23,7 @@
 %special_noun((activities, chatting)) --> [chatting].
 %special_noun((activities, swimming)) --> [swimming].
 %
-%mapping(s2relate,% what is your name -> my name is X
+%mapping(s2relate,% experimental
 %        s( belong(Y1), abs_noun(X2), is, sp_noun(Y2) ),
 %        q( what, is, belong(X1), abs_noun(X2) )
 %        ):-
@@ -31,6 +31,8 @@
 
 
 sentence( s(X,Y, is, Z) ) --> belonging_phrase(X), abstract_noun(Y),  [is],  special_noun(Z).
+
+sentence(s(X, Y, Z)) --> subject_pronoun(X), indicative_verb(Y), adjective(Z).
 
 sentence(s(X, Y, Z)) --> 
 	subject_phrase(X), verb(Y), object_phrase(Z).
@@ -113,24 +115,31 @@ noun(noun(robotics_course)) --> [sd_course].
 noun(noun(name)) --> [name].
 
 adverb(ad([very, much])) --> [very, much].
+adverb(ad([how])) --> [how].
 adverb(ad([])) --> [].
 
 verb(vb(like)) --> [like].
 verb(vb(love)) --> [love].
 verb(vb(is)) --> [is].
 
+indicative_verb(ivb(are)) --> [are].
+indicative_verb(ivb(am)) --> [am].
+
 subject_tobe_verb(s_2b([you, are])) --> [you, are].
 subject_tobe_verb(s_2b([i,am])) --> [i, am].
 subject_tobe_verb(s_2b([we, are])) --> [we, are].
 
+adjective(adj(great)) --> [great].
+adjective(adj(good)) --> [good].
+adjective(adj(fine)) --> [fine].
+                          
 /*  version 3 add some questions */
 
 question(q(why,do,S)) --> [why, do], sentence(S).
 question(q(do,S)) --> [do], sentence(S).
-question(q(where,is,S)) --> [where, is], sentence(S).
-question(q(what,is,S)) --> [what, is], sentence(S).
-
-% for what is ...
+% for "how are you"
+question(q(X, Y, Z)) --> adverb(X), indicative_verb(Y), subject_pronoun(Z).
+% for "what is"
 question( q( what, is, X, Y ) ) -->  [what, is],  belonging_phrase(X),  abstract_noun(Y).   
 
 /* version 4 add rules for changing a sentence to a question, vice versa */
@@ -168,11 +177,23 @@ mapping(s2name,% what is your name -> my name is X
         ):-
         mapping_belong(X1, Y1), mapping_noun(X2, Y2).
 
+mapping(s2how, % how are you -> i am fine
+        s(spn(X1), ivb(Y1), adj(_)),
+        q(ad(_), ivb(Y2), spn(Z2))
+        ):-
+        mapping_spn(X1, Z2), mapping_indicative(Y1, Y2).
+
 mapping_belong(my,your).
 mapping_belong(your,my).
 
 mapping_noun(name, derek).
 mapping_noun(derek, name).
+
+mapping_indicative(are, am).
+mapping_indicative(am, are).
+
+mapping_ad(how, fine).
+mapping_ad(fine, how).
 
 mapping_spn(i,you).
 mapping_spn(you,i).

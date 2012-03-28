@@ -7,7 +7,7 @@
 
 :- [map, database, route, pattern, readin, english, lib, names].
 :- use_module(library(random)).
-:- dynamic usr_name/1, information/2, feedback/2, alevel/1.
+:- dynamic usr_name/1, information/2, feedback/2, alevel/1, loc/1.
 
 % chat/0
 %
@@ -57,11 +57,11 @@ gen_reply(S, R):- % give directions
         find_route(Y, D, R), !,
         retract(loc(Y)).
 gen_reply(S, R):- % asking my name?
-        question(Tree2, S, _Rest), !, 
-        mapping(s2name,Tree1, Tree2),
+        question(Tree2, S, _Rest), 
+        mapping(s2name,Tree1, Tree2), !,
         sentence(Tree1, Rep,[]),
         append(Rep, ['!'], R).
-gen_reply(S, R):- % asking my name?
+gen_reply(S, R):- % asking my name (simple)?
         pattern_name(S, _), !,
         responses_db(my_name, D),
         random_pick(D, R).
@@ -69,6 +69,13 @@ gen_reply(S, R):- % asking my subjects?
         pattern_my_subjects(S, _), !,
         responses_db(my_subjects, D),
         random_pick(D, R).
+
+gen_reply(S, R):- % asking how I am?
+        question(Tree2, S, _Rest), !, 
+        mapping(s2how,Tree1, Tree2),
+        sentence(Tree1, Rep,[]), !,
+        append(Rep, ['!'], R).
+
 gen_reply(S, R):- % map to why question
 	sentence(Tree1, S, _Rest), !, 
 	mapping(s2why,Tree1, Tree2),

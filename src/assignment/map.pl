@@ -5,7 +5,8 @@
 % Description:  Map of Q-Block level 2 only.
 
 
-% next(Place1, Place2, Direction, WhichSide, Distance)
+% next/5
+% (Place1, Place2, Direction, WhichSide, Distance)
 %
 % Distance is in metres, e.g.
 %
@@ -76,9 +77,10 @@ next('2q48', '2q47', north, right, 2).
 next('2q48', 'exit4', south, front, 2).
 next('exit4', '2q48', north, left, 2).		
 
-% info(Place, PlaceInfo)
+% info/2
+% (Place, PlaceInfo)
 %
-%
+% Stroes metadata about places in Q-block.
 info('2q56', reception).
 info('2q6', cafe).
 info('2q4', toilet).
