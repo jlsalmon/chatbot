@@ -6,8 +6,6 @@
 
 :-[map].
 
-/* version 2 - add parse tree */
-
 %question( q( what , is, X, Y)) -->  [what, is],  belonging_phrase(X),  abstract_noun((Y,_)).
 %
 %sentence(s(X,Y, is, Z)) --> belonging_phrase(X), abstract_noun((Y,Tag)),  [is],  special_noun((Tag,Z)).
@@ -37,13 +35,13 @@ sentence( s(X,Y, is, Z) ) --> belonging_phrase(X), abstract_noun(Y),  [is],  spe
 sentence(s(X, Y, Z)) --> 
 	subject_phrase(X), verb(Y), object_phrase(Z).
 
-%sentence(s(X, Y, Z)) --> question(X), determiner(Y), place_name(Z).
-%
-%sentence(s(X, Y)) --> determiner(X), place_name(Y).
+sentence(s(X, Y, Z)) --> question(X), determiner(Y), place_name(Z).
+
+sentence(s(X, Y)) --> determiner(X), place_name(Y).
 
 sentence(s(X, Y)) --> subject_tobe_verb(X), prepositional_phrase(Y).
 
-%sentence(s(X, Y, Z)) --> question(X), object_pronoun(Y), noun(Z).
+sentence(s(X, Y, Z)) --> question(X), object_pronoun(Y), noun(Z).
 
 
 belonging_phrase(belong(your)) --> [your].
@@ -125,32 +123,6 @@ subject_tobe_verb(s_2b([you, are])) --> [you, are].
 subject_tobe_verb(s_2b([i,am])) --> [i, am].
 subject_tobe_verb(s_2b([we, are])) --> [we, are].
 
-/*** some tests
-
-1. from list to tree
-
-| ?- sentence(Tree, [i,love,you],[]).
-Tree = s(sp(spn(i)),vb(love),op(opn(you),ad([]))) ? ;
-no
-| ?- sentence(Tree, [i,love,you,very,much],[]).
-Tree = s(sp(spn(i)),vb(love),op(opn(you),ad([very,much]))) ? 
-yes
-% 6
-| ?- sentence(T,[i,am,in,bristol],[]).
-T = s(s_2b([i,am]),pp(prep(in),pname(bristol))) ? 
-
-2, from tree to list
-
-| ?- sentence(s(sp(spn(i)),vb(love),op(opn(you),ad([very,much]))), L,K).
-L = [i,love,you,very,much|K] ? 
-yes
-% 6
-| ?- sentence(s(s_2b([i,am]),pp(prep(in),pname(bristol))), L,[]).
-L = [i,am,in,bristol] ? 
-
-
-****/
-
 /*  version 3 add some questions */
 
 question(q(why,do,S)) --> [why, do], sentence(S).
@@ -158,15 +130,8 @@ question(q(do,S)) --> [do], sentence(S).
 question(q(where,is,S)) --> [where, is], sentence(S).
 question(q(what,is,S)) --> [what, is], sentence(S).
 
-question( q( what, is, X, Y ) ) -->  [what, is],  belonging_phrase(X),  abstract_noun(Y).   % for what is ...
-
-/* after added the above line, we can handle questions like:
-
-% 6
-| ?- question(Tree, [why,do , you, love,me],[]).
-Tree = q(why,do,s(sp(spn(you)),vb(love),op(opn(me),ad([])))) ? 
-
-**************/
+% for what is ...
+question( q( what, is, X, Y ) ) -->  [what, is],  belonging_phrase(X),  abstract_noun(Y).   
 
 /* version 4 add rules for changing a sentence to a question, vice versa */
 
@@ -215,33 +180,3 @@ mapping_spn(you,i).
 mapping_opn(you,me).
 mapping_opn(me,you).
 
-/* 
-
-| ?- question(Tree, [why,do,you,love,me],[]), mapping(s2why, T, Tree), sentence(T, L, []).
-L = [i,love,you],
-T = s(sp(spn(i)),vb(love),op(opn(you),ad([]))),
-Tree = q(why,do,s(sp(spn(you)),vb(love),op(opn(me),ad([])))) ? 
-
-| ?- sentence(T1, [i,like,uwe],[]), mapping(s2why,T1,T2), question(T2, L,[]).
-L = [why,do,you,like,uwe],
-T1 = s(sp(spn(i)),vb(like),op(np(noun(uwe)),ad([]))),
-T2 = q(why,do,s(sp(spn(you)),vb(like),op(np(noun(uwe)),ad([])))) ? 
-yes
-% 7
-| ?- sentence(T1, [i,like,uwe],[]), mapping(s2q,T1,T2), question(T2, L,[]).
-L = [do,you,like,uwe],
-T1 = s(sp(spn(i)),vb(like),op(np(noun(uwe)),ad([]))),
-T2 = q(do,s(sp(spn(you)),vb(like),op(np(noun(uwe)),ad([])))) ? ;
-
-
-******************************/
-
-:-[readin].
-
-test:-  repeat,
-        readin(S),
-        gen_reply(S,Ans),
-        write_list(Ans), nl,
-        S = [bye|_].
-
-test:- write(bye),nl.

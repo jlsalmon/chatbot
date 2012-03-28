@@ -55,7 +55,6 @@ contains(A, B) :-
   sublist(B, A),
   B \= [].
 
-% sublist()
 sublist(S, L) :-
   append(_, L2, L),
   append(S, _, L2).

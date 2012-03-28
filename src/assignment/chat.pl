@@ -13,7 +13,7 @@
 %
 % top level call
 chat:-
-	print_welcome, nl,
+	print_welcome,
 	conversations.
 
 % conversations/0
@@ -31,7 +31,7 @@ conversations:-
 
 % gen_reply/2
 %
-% 
+% Generates a response based on what the user typed in.
 gen_reply(S, R):- % check for "bye"
         is_quit(S), !,
 	responses_db(bye, Res), 
@@ -110,17 +110,32 @@ is_greeting(S):-
         intersect(S, D, A),
         A \== [].
 
+% is_question/1
+%
+% Checks if the given sentence S matches any "question" type
+% sentences in the database.
 is_question(S):-
         member('?', S).
 
+% is_thanks/1
+%
+% Checks if the given sentence S matches any "thanks" type
+% sentences in the database.
 is_thanks(S):-
         thanks_db(D),
         intersect(S, D, A),
         A \== [].
 
+% is_quit/1
+%
+% Checks if the given sentence S contains the word "bye".
 is_quit(S):- 
         subset([bye], S).
 
+% get_location/1
+%
+% Prompts the user to enter in their current location in
+% Q-block N times.
 get_location(0).
 get_location(N):-
         print_prompt(you),
@@ -139,11 +154,19 @@ get_location(_, N):-
         M is N - 1,
         get_location(M).
 
+% is_valid_loc/2
+%
+% Checks if the given list contains a valid location in
+% Q- block, and returns it as L.
 is_valid_loc([H|_], L):- 
         (info(L, H); next(H,_,_,_,_)), !.
 is_valid_loc([_|T], L):-
         is_valid_loc(T, L).
 
+% get_feedback/1
+%
+% Asks the user for a number (N) of pieces of feedback, 
+% and asserts the responses into the database.
 get_feedback(0).
 get_feedback(N):-
         questions_db(feedback, D),
@@ -156,6 +179,10 @@ get_feedback(N):-
         M is N - 1,
         get_feedback(M).
 
+% get_info/1
+%
+% Asks the user for a number (N) of pieces of information, 
+% and asserts the responses into the database.
 get_info(0).
 get_info(N):-
         questions_db(info, D),
@@ -178,6 +205,13 @@ get_info(QL, _):-
         get_alevel_info_loop.
 get_info(_, _).
 
+% get_usr_name/1
+%
+% Prompts the user to input a valid name, and asserts it.
+get_usr_name(Q):-
+        print_prompt(you),
+        readin(S),
+        get_usr_name(Q, S).
 get_usr_name(_, RL):-
         is_valid_name(RL),
         assert(usr_name(RL)), !.
@@ -187,15 +221,18 @@ get_usr_name(Q, _):-
         print_prompt(me),
         write_list(X),
         get_usr_name(Q).
-get_usr_name(Q):-
-        print_prompt(you),
-        readin(S),
-        get_usr_name(Q, S).
 
+% is_valid_name/1
+%
+% Checks if the given list contains a name that is valid.
 is_valid_name(NL):-
         nth_item(NL, 1, N),
         name(N).
 
+% get_alevel_info_loop/0
+%
+% When called, will prompt the user for a list of valid
+% a-levels.
 get_alevel_info_loop:-
 	print_prompt(you),
 	readin(S),
@@ -209,12 +246,19 @@ get_alevel_info_loop(_):-
         write_list(R),
         get_alevel_info_loop.
 
+% is_valid_alevel/1
+%
+% Checks to see if the given list contains valid alevels,
+% and if so, asserts them.
 is_valid_alevel(S):- 
         alevel_db(D),
-        intersect(S,D, A),
+        intersect(S, D, A),
         A \== [],
         assert(alevel(A)).
 
+% print_welcome/0
+%
+% Outputs a random greeting message.
 print_welcome:-
         responses_db(greeting, D),
         random_pick(D, W),
@@ -226,20 +270,22 @@ print_prompt(me):-
 	my_icon(X), write(X), write(': '), flush_output.
 print_prompt(you):-
 	user_icon(X), write(X), write(': '), flush_output.
-
 my_icon('user 1').
 user_icon('user 2').
 
+% random_pick/2
+%
+% Picks a random response (Res) from a list (R).
 random_pick(Res, R):- 
         length(Res, Length),  
-        Upper is Length+1,
-        % create a random number between 1..Upper
+        Upper is Length + 1,
         random(1, Upper, Rand),
         nth_item(Res, Rand, R).
 
 % print_report/0
 %
-% 
+% Outputs a conversation summary based on facts gathered 
+% during chat.
 print_report:-
         write('\n--- Conversation report ---\n'),
 	usr_name(X), alevel(Y), 
