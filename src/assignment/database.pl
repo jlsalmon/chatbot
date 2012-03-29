@@ -27,8 +27,7 @@ responses_db(change_topic, [
 responses_db(location, [
         ['Where are you at the moment?'],
         ['What room are you in?'],
-        ['Where are you?'],
-        ['I\'m not telling!']
+        ['Where are you?']
         ]).
 
 responses_db(get_location, [
